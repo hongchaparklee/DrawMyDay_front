@@ -1,7 +1,6 @@
-//ColoringPad.js
+//ColoringPad.js 
 
 import React, { useState, useRef, useEffect } from 'react';
-import { SketchPicker } from 'react-color';
 
 const ColoringPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -61,9 +60,16 @@ const ColoringPad = () => {
       canvas.removeEventListener('touchend', handleCanvasTouchEnd);
     };
     }, [color, isDrawing, penSize]);
-    
-    const handleColorChange = (newColor) => {
-    setColor(newColor.hex);
+
+    const predefinedColors = [
+      '#FFFFFF', '#FF0000', '#FFA07A', '#FF6347', '#FF4500', 
+      '#FFFF00', '#ADFF2F', '#008000', '#00FFFF', 
+      '#0000FF', '#00008B', '#800080', '#FFC0CB', '#FF69B4', 
+      '#A52A2A', '#A9A9A9', '#808080', '#000000',
+    ];
+  
+    const handleColorClick = (newColor) => {
+      setColor(newColor);
     };
     
     const toggleEraserMode = () => {
@@ -81,37 +87,75 @@ const ColoringPad = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     pathRef.current = [];
     };
-    
     const handleUndo = () => {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
+      const lastState = stateStack[stateStack.length - 1];
+      
+      if (lastState) {
+        const newStack = stateStack.slice(0, stateStack.length - 1);
+        context.putImageData(lastState, 0, 0);
+        setStateStack(newStack);
+        setRedoStack((prev) => [lastState, ...prev]);
+      }
+      };
+      
+      const handleRedo = () => {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
+      const nextState = redoStack[0];
+      
+      if (nextState) {
+        const newStack = redoStack.slice(1);
+        setRedoStack(newStack);
+        setStateStack((prev) => [...prev, nextState]);
+        context.putImageData(nextState, 0, 0);
+      }
+      };
+  
+      // 이미지를 로딩하고 캔버스에 그리는 함수
+  const loadImageOnCanvas = (imageFile) => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    const lastState = stateStack[stateStack.length - 1];
-    
-    if (lastState) {
-      const newStack = stateStack.slice(0, stateStack.length - 1);
-      context.putImageData(lastState, 0, 0);
-      setStateStack(newStack);
-      setRedoStack((prev) => [lastState, ...prev]);
-    }
+  
+    // 이미지 객체 생성
+    const img = new Image();
+    img.src = URL.createObjectURL(imageFile);
+  
+    img.onload = () => {
+      // 캔버스 크기에 맞게 이미지 크기 조정
+      // 여기서는 단순히 캔버스 크기에 맞추지만, 비율을 유지하면서 조정하려면 추가 계산이 필요
+      const hRatio = canvas.width / img.width;
+      const vRatio = canvas.height / img.height;
+      const ratio = Math.min(hRatio, vRatio);
+      const centerShift_x = (canvas.width - img.width * ratio) / 2;
+      const centerShift_y = (canvas.height - img.height * ratio) / 2;  
+  
+      context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스 클리어
+      context.drawImage(img, 0, 0, img.width, img.height,
+                        centerShift_x, centerShift_y, img.width * ratio, img.height * ratio); // 이미지 그리기
     };
-    
-    const handleRedo = () => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    const nextState = redoStack[0];
-    
-    if (nextState) {
-      const newStack = redoStack.slice(1);
-      setRedoStack(newStack);
-      setStateStack((prev) => [...prev, nextState]);
-      context.putImageData(nextState, 0, 0);
-    }
+  };
+  // 파일 입력 처리
+    const handleFileInput = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        loadImageOnCanvas(file);
+      }
     };
-    
-
-  return (
-    <div>
-      <SketchPicker color={color} onChange={handleColorChange} />
+      
+  
+    return (
+      <div>
+      <div>
+        {predefinedColors.map((predefinedColor) => (
+          <button
+            key={predefinedColor}
+            style={{ backgroundColor: predefinedColor, width: 30, height: 30, margin: 2 }}
+            onClick={() => handleColorClick(predefinedColor)}
+          />
+        ))}
+      </div>
       <button onClick={toggleEraserMode}>{isEraserModeRef.current ? '펜' : '지우개'}</button>
       <input
         type="range"
@@ -121,6 +165,7 @@ const ColoringPad = () => {
         value={penSize}
         onChange={handlePenSizeChange}
       />
+      <input type="file" accept="image/*" onChange={handleFileInput} />
       <span>{penSize}</span>
       <button onClick={handleClearAll}>전체 지우기</button>
       <button onClick={handleUndo}>뒤로 가기</button>
@@ -130,12 +175,11 @@ const ColoringPad = () => {
         width={800}
         height={600}
         style={{ border: '1px solid #000', backgroundColor: 'white' }}
-        onTouchMove={(e) => {
-          e.preventDefault();
-        }}
+        onTouchMove={(e) => e.preventDefault()}
       />
     </div>
   );
 };
-
-export default ColoringPad;
+  
+  export default ColoringPad;
+  

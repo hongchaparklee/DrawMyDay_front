@@ -1,7 +1,7 @@
 //ExtraPad.js
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-//만약 내가 수정함
+
 const ExtraPad = () => {
   const [stateStack, setStateStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
