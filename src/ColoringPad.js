@@ -159,7 +159,14 @@ const ColoringPad = () => {
         {predefinedColors.map((predefinedColor) => (
           <button
             key={predefinedColor}
-            style={{ backgroundColor: predefinedColor, width: 30, height: 30, margin: 2 }}
+            style={{
+              backgroundColor: predefinedColor,
+              width: 30,
+              height: 30,
+              margin: 2,
+              border: color === predefinedColor ? '3px solid black' : '1px solid grey', // 현재 선택된 색상에 대해서는 두꺼운 테두리를 적용
+              boxSizing: 'border-box' // border 크기 포함하여 전체 크기 유지
+            }}
             onClick={() => handleColorClick(predefinedColor)}
           />
         ))}
