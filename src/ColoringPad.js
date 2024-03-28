@@ -114,28 +114,37 @@ const ColoringPad = () => {
       };
   
       // 이미지를 로딩하고 캔버스에 그리는 함수
-  const loadImageOnCanvas = (imageFile) => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-  
-    // 이미지 객체 생성
-    const img = new Image();
-    img.src = URL.createObjectURL(imageFile);
-  
-    img.onload = () => {
-      // 캔버스 크기에 맞게 이미지 크기 조정
-      // 여기서는 단순히 캔버스 크기에 맞추지만, 비율을 유지하면서 조정하려면 추가 계산이 필요
-      const hRatio = canvas.width / img.width;
-      const vRatio = canvas.height / img.height;
-      const ratio = Math.min(hRatio, vRatio);
-      const centerShift_x = (canvas.width - img.width * ratio) / 2;
-      const centerShift_y = (canvas.height - img.height * ratio) / 2;  
-  
-      context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스 클리어
-      context.drawImage(img, 0, 0, img.width, img.height,
-                        centerShift_x, centerShift_y, img.width * ratio, img.height * ratio); // 이미지 그리기
-    };
-  };
+      const loadImageOnCanvas = (imageFile) => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+      
+        // 이미지 객체 생성
+        const img = new Image();
+        img.src = URL.createObjectURL(imageFile);
+      
+        img.onload = () => {
+          // 캔버스와 이미지의 비율을 계산
+          const hRatio = canvas.width / img.width;
+          const vRatio = canvas.height / img.height;
+          const ratio = Math.min(hRatio, vRatio); // 캔버스에 맞게 이미지 비율 유지
+          
+          // 이미지가 캔버스 중앙에 위치하도록
+          const centerShift_x = (canvas.width - img.width * ratio) / 2;
+          const centerShift_y = (canvas.height - img.height * ratio) / 2;
+      
+          context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스 클리어
+          // 비율에 맞게 이미지 크기 조정 및 중앙에 위치시키기
+          context.drawImage(img, 0, 0, img.width, img.height, 
+                            centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+          // 이미지 테두리 설정하는 곳
+          context.strokeStyle = '#000'; //테두리 색상
+          context.lineWidth = 1; //테두리 두께
+          // 테두리를 그릴 사각형의 시작점과 너비, 높이를 계산하여 테두리 그리기
+      context.strokeRect(centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+        };
+      };
+      
+      
   // 파일 입력 처리
     const handleFileInput = (e) => {
       const file = e.target.files[0];
@@ -143,7 +152,6 @@ const ColoringPad = () => {
         loadImageOnCanvas(file);
       }
     };
-      
   
     return (
       <div>
@@ -174,7 +182,7 @@ const ColoringPad = () => {
         ref={canvasRef}
         width={800}
         height={600}
-        style={{ border: '1px solid #000', backgroundColor: 'white' }}
+        style={{ backgroundColor: 'white' }}
         onTouchMove={(e) => e.preventDefault()}
       />
     </div>
@@ -182,4 +190,3 @@ const ColoringPad = () => {
 };
   
   export default ColoringPad;
-  
