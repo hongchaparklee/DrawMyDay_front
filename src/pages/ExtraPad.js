@@ -1,6 +1,7 @@
 //ExtraPad.js
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const ExtraPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -12,6 +13,12 @@ const ExtraPad = () => {
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
+  
+  let navigate = useNavigate();
+
+  const goToColoringPad = () => {
+    navigate('/coloring');
+  }
 
   const invertColors = () => {
     const canvas = canvasRef.current;
@@ -205,6 +212,7 @@ const ExtraPad = () => {
       <button onClick={handleUndo}>뒤로 가기</button>
       <button onClick={handleRedo}>앞으로 가기</button>
       <button onClick={saveCanvas}>확인</button>
+      <button onClick={goToColoringPad}>다음</button>
       <canvas
         ref={canvasRef}
         width={800}

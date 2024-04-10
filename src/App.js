@@ -2,18 +2,20 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
-import ColoringPad from './pages/ColoringPage';
+import ColoringPad from './ColoringPad';
 import OptionPage from './pages/OptionPage';
-import ExtraPage from './pages/ExtraPage';
+import ExtraPad from './pages/ExtraPad';
+
 //하이
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/coloring" element={<ColoringPad />} />
         <Route path="/option" element={<OptionPage />} />
-        <Route path="/extra" element={<ExtraPage />} />
         <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/coloring" element={<ColoringPad />} />
+        <Route path="/extra" element={<ExtraPad />} />
       </Routes>
     </Router>
   );

@@ -5,7 +5,7 @@ import ExtraPad from './ExtraPad';
 const ExtraPage = () => {
   return (
     <div>
-      <h2>Extra Page</h2>
+      <h2>일기 쓰기</h2>
       <ExtraPad />
     </div>
   );

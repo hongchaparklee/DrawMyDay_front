@@ -48,9 +48,9 @@ const MainPage = () => {
     <div style={containerStyle}>
       <h2 style={headingStyle}>Draw My Day</h2>
       <div style={linkContainerStyle}>
-        <LinkItem to="/coloring" icon={FaPalette}>색칠하기</LinkItem>
-        <LinkItem to="/option" icon={FaCog}>옵션</LinkItem>
-        <LinkItem to="/extra" icon={FaCubes}>잉여</LinkItem>
+        <LinkItem to="/coloring" icon={FaPalette}>일기 쓰기</LinkItem>
+        <LinkItem to="/option" icon={FaCog}>옵션 및 사용자 설정</LinkItem>
+        <LinkItem to="/extra" icon={FaCubes}>추억</LinkItem>
       </div>
     </div>
   );
