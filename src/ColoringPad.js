@@ -1,4 +1,4 @@
-//ColoringPad.js 
+//ColoringPad.js
 
 import React, { useState, useRef, useEffect } from 'react';
 

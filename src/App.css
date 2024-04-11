@@ -7,6 +7,18 @@
   pointer-events: none;
 }
 
+@font-face {
+  font-family: 'KCCMurukmuruk';
+  src: url('./fonts/KCCMurukmuruk.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.my-page {
+  font-family: 'KCCMurukmuruk', sans-serif;
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -35,4 +47,38 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* App.css에 추가 */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.main-heading {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.link-container {
+  display: flex;
+  justify-content: center;
+}
+
+.link-item {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.icon-style {
+  font-size: 30px;
+  margin-bottom: 10px;
 }
