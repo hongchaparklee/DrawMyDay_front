@@ -12,7 +12,7 @@ const containerStyle = {
 };
 
 const headingStyle = {
-  fontSize: '24px',
+  fontSize: '64px',
   marginBottom: '20px',
 };
 
@@ -21,9 +21,9 @@ const iconStyle = {
   marginBottom: '10px',
 };
 
-const LinkItem = ({ to, children, icon: Icon }) => (
+const LinkItem = ({ to, children, icon: Icon, color }) => (
   <Link to={to} className="link-item">
-    <Icon className="icon-style" style = {iconStyle}/>
+    <Icon className="icon-style" style = {{...iconStyle, color: color}}/>
     {children}
   </Link>
 );
@@ -33,9 +33,9 @@ const MainPage = () => {
     <div className="main-container my-page" style={containerStyle}>
       <h2 className="main-heading" style = {headingStyle}>Draw My Day</h2>
       <div className="link-container">
-        <LinkItem to="/coloring" icon={FaPencilAlt}>일기 쓰기</LinkItem>
-        <LinkItem to="/option" icon={FaCog}>옵션 및 사용자 설정</LinkItem>
-        <LinkItem to="/extra" icon={FaPhotoVideo}>추억</LinkItem>
+        <LinkItem to="/coloring" icon={FaPencilAlt} color = "orange">일기 쓰기</LinkItem>
+        <LinkItem to="/option" icon={FaCog} color = "pink">옵션 및 사용자 설정</LinkItem>
+        <LinkItem to="/extra" icon={FaPhotoVideo} color = "skyblue">추억</LinkItem>
       </div>
     </div>
   );
