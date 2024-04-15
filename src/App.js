@@ -4,18 +4,18 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import ColoringPad from './ColoringPad';
 import OptionPage from './pages/OptionPage';
-import ExtraPad from './pages/ExtraPad';
+import MemoryPage from './pages/MemoryPage';
+import DrawMyDayPad from './pages/DrawMyDayPad';
 
-//하이
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/option" element={<OptionPage />} />
-        <Route path="/" element={<MainPage />} />
+      <Route path="/option" element={<OptionPage />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/coloring" element={<ColoringPad />} />
-        <Route path="/extra" element={<ExtraPad />} />
+        <Route path="/memory" element={<MemoryPage />} /> 
+        <Route path="/DrawMyDay" element={<DrawMyDayPad />} />
       </Routes>
     </Router>
   );

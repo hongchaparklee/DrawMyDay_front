@@ -1,9 +1,9 @@
-//ExtraPad.js
+//DrawMyDayPad.js
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
-const ExtraPad = () => {
+const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const [color] = useState('#000');
@@ -226,4 +226,4 @@ const ExtraPad = () => {
   );
 };
 
-export default ExtraPad;
+export default DrawMyDayPad;

@@ -33,9 +33,9 @@ const MainPage = () => {
     <div className="main-container my-page" style={containerStyle}>
       <h2 className="main-heading" style = {headingStyle}>Draw My Day</h2>
       <div className="link-container">
-        <LinkItem to="/coloring" icon={FaPencilAlt} color = "#ff7f00">일기 쓰기</LinkItem>
+        <LinkItem to="/DrawMyDay" icon={FaPencilAlt} color = "#ff7f00">일기 쓰기</LinkItem>
         <LinkItem to="/option" icon={FaCog} color = "#ff69b4">옵션 및 사용자 설정</LinkItem>
-        <LinkItem to="/extra" icon={FaPhotoVideo} color = "00bfff">추억</LinkItem>
+        <LinkItem to="/Memory" icon={FaPhotoVideo} color = "00bfff">추억</LinkItem>
       </div>
     </div>
   );
