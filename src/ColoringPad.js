@@ -24,8 +24,6 @@ const ColoringPad = () => {
     const y = e.touches[0].clientY - rect.top;
   
     console.log('Current color:', color);
-    // 지우개 모드가 아닐 때, 색상에 투명도가 적용됩니다.
-    // 여기서 `color` 변수는 'rgba(255, 0, 0, 0.5)'와 같은 형식이어야 합니다.
     context.strokeStyle = isEraserModeRef.current ? canvas.style.backgroundColor : color;
     context.lineWidth = penSize;
     context.beginPath();
@@ -73,19 +71,17 @@ const ColoringPad = () => {
     ];
   
     const handleColorClick = (predefinedColor) => {
-      // RGBA 형식으로 색상과 투명도 설정
-      // 예시로, '#ff0000'과 같은 HEX 코드를 RGBA로 변환하는 방법을 보여주기 위해
-      // 아래 코드는 단순한 예시이며, 실제 색상 코드에 따라 변환 로직이 필요할 수 있습니다.
       let rgbaColor = predefinedColor;
-      if (predefinedColor[0] === '#') { // HEX 코드인 경우
+      if (predefinedColor[0] === '#') { 
         const r = parseInt(predefinedColor.slice(1, 3), 16);
         const g = parseInt(predefinedColor.slice(3, 5), 16);
         const b = parseInt(predefinedColor.slice(5, 7), 16);
         rgbaColor = `rgba(${r}, ${g}, ${b}, 0.5)`; // 50% 투명도 적용
       }
-      console.log('RGBA Color:', rgbaColor);
       setColor(rgbaColor);
     };
+    
+    
     
     
     const toggleEraserMode = () => {
