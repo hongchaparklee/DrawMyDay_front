@@ -1,6 +1,10 @@
 //ColoringPad.js
 
 import React, { useState, useRef, useEffect } from 'react';
+import { FaPencilAlt, FaEraser } from 'react-icons/fa';
+import DeleteIcon from '@mui/icons-material/Delete';
+import UndoIcon from '@mui/icons-material/Undo';
+import RedoIcon from '@mui/icons-material/Redo';
 
 const ColoringPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -166,46 +170,51 @@ const ColoringPad = () => {
     };
   
     return (
-      <div>
-      <div>
-        {predefinedColors.map((predefinedColor) => (
-          <button
-            key={predefinedColor}
-            style={{
-              backgroundColor: predefinedColor,
-              width: 30,
-              height: 30,
-              margin: 2,
-              border: color === predefinedColor ? '3px solid black' : '1px solid grey', // 현재 선택된 색상에 대해서는 두꺼운 테두리를 적용
-              boxSizing: 'border-box' // border 크기 포함하여 전체 크기 유지
-            }}
-            onClick={() => handleColorClick(predefinedColor)}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '20px' }}>
+          {predefinedColors.map((predefinedColor) => (
+            <button
+              key={predefinedColor}
+              style={{
+                backgroundColor: predefinedColor,
+                width: 30,
+                height: 30,
+                margin: 2,
+                border: color === predefinedColor ? '3px solid black' : '1px solid grey',
+                boxSizing: 'border-box'
+              }}
+              onClick={() => handleColorClick(predefinedColor)}
+            />
+          ))}
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
+          <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}</button>
+          <input
+            type="range"
+            min="1"
+            max="20"
+            step="1"
+            value={penSize}
+            onChange={handlePenSizeChange}
           />
-        ))}
+          <input type="file" accept="image/*" onChange={handleFileInput} />
+          <button onClick={handleClearAll}><DeleteIcon /></button>
+          <button onClick={handleUndo}><UndoIcon /></button>
+          <button onClick={handleRedo}><RedoIcon /></button>
+        </div>
+        
+        <canvas
+          ref={canvasRef}
+          width={800}
+          height={600}
+          style={{ backgroundColor: 'white' }}
+          onTouchMove={(e) => e.preventDefault()}
+        />
       </div>
-      <button onClick={toggleEraserMode}>{isEraserModeRef.current ? '펜' : '지우개'}</button>
-      <input
-        type="range"
-        min="1"
-        max="20"
-        step="1"
-        value={penSize}
-        onChange={handlePenSizeChange}
-      />
-      <input type="file" accept="image/*" onChange={handleFileInput} />
-      <span>{penSize}</span>
-      <button onClick={handleClearAll}>전체 지우기</button>
-      <button onClick={handleUndo}>뒤로 가기</button>
-      <button onClick={handleRedo}>앞으로 가기</button>
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        style={{ backgroundColor: 'white' }}
-        onTouchMove={(e) => e.preventDefault()}
-      />
-    </div>
-  );
+    );
+    
+    
 };
   
   export default ColoringPad;

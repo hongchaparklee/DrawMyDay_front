@@ -2,6 +2,10 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'; 
+import DeleteIcon from '@mui/icons-material/Delete';
+import UndoIcon from '@mui/icons-material/Undo';
+import RedoIcon from '@mui/icons-material/Redo';
+import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -196,34 +200,37 @@ const DrawMyDayPad = () => {
         }
       };
     
-  return (
-    <div>
-      <button onClick={toggleEraserMode}>{isEraserModeRef.current ? '펜' : '지우개'}</button>
-      <input
-        type="range"
-        min="1"
-        max="20"
-        step="1"
-        value={penSize}
-        onChange={handlePenSizeChange}
-      />
-      <span>{penSize}</span>
-      <button onClick={handleClearAll}>전체 지우기</button>
-      <button onClick={handleUndo}>뒤로 가기</button>
-      <button onClick={handleRedo}>앞으로 가기</button>
-      <button onClick={saveCanvas}>확인</button>
-      <button onClick={goToColoringPad}>다음</button>
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        style={{ border: '1px solid #000', backgroundColor: 'white' }}
-        onTouchMove={(e) => {
-          e.preventDefault();
-        }}
-      />
-    </div>
-  );
+      return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '20px' }}>
+          <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}
+          </button>
+            <input
+              type="range"
+              min="1"
+              max="20"
+              step="1"
+              value={penSize}
+              onChange={handlePenSizeChange}
+            />
+            <span>{penSize}</span>
+            <button onClick={handleClearAll}><DeleteIcon /></button>
+            <button onClick={handleUndo}><UndoIcon /></button>
+            <button onClick={handleRedo}><RedoIcon /></button>
+            <button onClick={saveCanvas}>확인</button>
+            <button onClick={goToColoringPad}>다음</button>
+          </div>
+          <canvas
+            ref={canvasRef}
+            width={800}
+            height={600}
+            style={{ border: '1px solid #000', backgroundColor: 'white' }}
+            onTouchMove={(e) => {
+              e.preventDefault();
+            }}
+          />
+        </div>
+      );
 };
 
 export default DrawMyDayPad;
