@@ -5,6 +5,7 @@ import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
+import {CirclePicker} from 'react-color';
 
 const ColoringPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -49,6 +50,7 @@ const ColoringPad = () => {
   
     e.preventDefault();
   };
+
   
   const handleCanvasTouchEnd = () => {
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -66,27 +68,6 @@ const ColoringPad = () => {
   };
   
     }, [color, isDrawing, penSize]);
-
-    const predefinedColors = [
-      '#FFFFFF', '#FF0000', '#FFA07A', '#FF6347', '#FF4500', 
-      '#FFFF00', '#ADFF2F', '#008000', '#00FFFF', 
-      '#0000FF', '#00008B', '#800080', '#FFC0CB', '#FF69B4', 
-      '#A52A2A', '#A9A9A9', '#808080', '#000000',
-    ];
-  
-    const handleColorClick = (predefinedColor) => {
-      let rgbaColor = predefinedColor;
-      if (predefinedColor[0] === '#') { 
-        const r = parseInt(predefinedColor.slice(1, 3), 16);
-        const g = parseInt(predefinedColor.slice(3, 5), 16);
-        const b = parseInt(predefinedColor.slice(5, 7), 16);
-        rgbaColor = `rgba(${r}, ${g}, ${b}, 0.5)`; // 50% 투명도 적용
-      }
-      setColor(rgbaColor);
-    };
-    
-    
-    
     
     const toggleEraserMode = () => {
     isEraserModeRef.current = !isEraserModeRef.current;
@@ -161,6 +142,10 @@ const ColoringPad = () => {
       };
       
       
+      const handleColorChange = (color) => {
+        setColor(color.hex); // 선택된 색상의 HEX 값을 상태로 저장
+      };
+      
   // 파일 입력 처리
     const handleFileInput = (e) => {
       const file = e.target.files[0];
@@ -172,20 +157,11 @@ const ColoringPad = () => {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '20px' }}>
-          {predefinedColors.map((predefinedColor) => (
-            <button
-              key={predefinedColor}
-              style={{
-                backgroundColor: predefinedColor,
-                width: 30,
-                height: 30,
-                margin: 2,
-                border: color === predefinedColor ? '3px solid black' : '1px solid grey',
-                boxSizing: 'border-box'
-              }}
-              onClick={() => handleColorClick(predefinedColor)}
-            />
-          ))}
+          
+          <div>
+            <CirclePicker color={color} onChangeComplete={handleColorChange} />
+              {/* 색상 선택기 아래에 선택된 색상을 표시하는 예제 */}
+          </div>
         </div>
         
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
