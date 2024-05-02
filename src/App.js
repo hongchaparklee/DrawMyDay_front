@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import ColoringPad from './ColoringPad';
 import OptionPage from './pages/OptionPage';
-import MemoryPage from './pages/MemoryPage'; // 이 부분을 MemoryPage로 수정
+import MemoryPage from './pages/MemoryPage';
+import CompletePage from './pages/CompletePage';
 import DrawMyDayPad from './pages/DrawMyDayPad';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/coloring" element={<ColoringPad />} />
         <Route path="/memory" element={<MemoryPage />} /> 
         <Route path="/DrawMyDay" element={<DrawMyDayPad />} />
+        <Route path="/complete" element={<CompletePage />} />
       </Routes>
     </Router>
   );
