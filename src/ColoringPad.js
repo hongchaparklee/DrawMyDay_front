@@ -154,39 +154,37 @@ const ColoringPad = () => {
     };
   
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        {/* 내부 컨텐츠를 수직으로 정렬하기 위한 Container */}
+        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '20px' }}>
           <div>
             <CirclePicker color={color} onChangeComplete={handleColorChange} />
-              {/* 색상 선택기 아래에 선택된 색상을 표시하는 예제 */}
+            {/* 색상 선택기 아래 선택된 색상 표시 */}
           </div>
         </div>
         
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
-          <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}</button>
-          <input
-            type="range"
-            min="1"
-            max="20"
-            step="1"
-            value={penSize}
-            onChange={handlePenSizeChange}
+        {/* 캔버스 및 사용자 인터페이스 버튼 */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
+            <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}</button>
+            <input type="range" min="1" max="20" step="1" value={penSize} onChange={handlePenSizeChange} />
+            <input type="file" accept="image/*" onChange={handleFileInput} />
+            <button onClick={handleClearAll}><DeleteIcon /></button>
+            <button onClick={handleUndo}><UndoIcon /></button>
+            <button onClick={handleRedo}><RedoIcon /></button>
+          </div>
+          
+          <canvas
+            ref={canvasRef}
+            width={800}
+            height={600}
+            style={{ backgroundColor: 'white' }}
+            onTouchMove={(e) => e.preventDefault()}
           />
-          <input type="file" accept="image/*" onChange={handleFileInput} />
-          <button onClick={handleClearAll}><DeleteIcon /></button>
-          <button onClick={handleUndo}><UndoIcon /></button>
-          <button onClick={handleRedo}><RedoIcon /></button>
         </div>
-        
-        <canvas
-          ref={canvasRef}
-          width={800}
-          height={600}
-          style={{ backgroundColor: 'white' }}
-          onTouchMove={(e) => e.preventDefault()}
-        />
       </div>
     );
+    
 };
   
   export default ColoringPad;
