@@ -1,19 +1,19 @@
 //DrawMyDayPad.js
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import DeleteIcon from '@mui/icons-material/Delete';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
+import onegoearth from '../assets/onegoearth.png';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const [color] = useState('#000');
-  const [penSize, setPenSize] = useState(5);
+  const [penSize] = useState(2);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [lineSpacing] = useState(80);
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
@@ -55,34 +55,18 @@ const DrawMyDayPad = () => {
       document.body.removeChild(link); 
     }
   };
-  
-  
-  
-
-  const drawHorizontalLines = useCallback(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-
-    context.clearRect(0, 0, canvas.width, canvas.height); 
-
-
-    for (let y = 0; y < canvas.height; y += lineSpacing) {
-      context.beginPath(); // 새로운 경로 시작
-      context.moveTo(0, y);
-      context.lineTo(canvas.width, y);
-      context.strokeStyle = '#ddd'; // 가로선 색상
-      context.stroke();
-      context.closePath(); // 경로 닫기
-    }
-  }, [lineSpacing]);
-
 
   useEffect(() => {
-    drawHorizontalLines();
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     setStateStack([imageData]);
+
+    const image = new Image();
+    image.onload = function(){
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    };
+    image.src = onegoearth;
 
     const initializeDrawingSettings = () => {
         context.strokeStyle = color; 
@@ -142,7 +126,7 @@ const DrawMyDayPad = () => {
       canvas.removeEventListener('touchmove', handleCanvasTouchMove);
       canvas.removeEventListener('touchend', handleCanvasTouchEnd);
     };
-  }, [color, isDrawing, penSize, drawHorizontalLines]);
+  }, [color, isDrawing, penSize]);
     
   const toggleEraserMode = () => {
     const canvas = canvasRef.current;
@@ -159,16 +143,22 @@ const DrawMyDayPad = () => {
     isEraserModeRef.current = !isEraserModeRef.current; // 모드 토글
     };
     
-    const handlePenSizeChange = (e) => {
-      setPenSize(parseInt(e.target.value, 10));
-    };
-    
     const handleClearAll = () => {
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
+      // 캔버스를 클리어합니다.
       context.clearRect(0, 0, canvas.width, canvas.height);
+      // pathRef를 초기화합니다.
       pathRef.current = [];
+    
+      // 배경 이미지를 다시 그립니다.
+      const image = new Image();
+      image.onload = function() {
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+      image.src = onegoearth; // 이전에 설정한 이미지 경로를 사용합니다.
     };
+    
 
     const handleUndo = () => { //뒤로가기 버튼
       const canvas = canvasRef.current;
@@ -199,36 +189,29 @@ const DrawMyDayPad = () => {
     };
     
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '20px' }}>
-      <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}
-      </button>
-      <input
-        type="range"
-        min="1"
-        max="20"
-        step="1"
-        value={penSize}
-        onChange={handlePenSizeChange}
-      />
-      <span>{penSize}</span>
-      <button onClick={handleClearAll}><DeleteIcon /></button>
-      <button onClick={handleUndo}><UndoIcon /></button>
-      <button onClick={handleRedo}><RedoIcon /></button>
-      <button onClick={saveCanvas}>확인</button>
-      <button onClick={goToColoringPad}>다음</button>
-      </div>
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        style={{ border: '1px solid #000', backgroundColor: 'white' }}
-        onTouchMove={(e) => {
-          e.preventDefault();
-        }}
-      />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', backgroundColor : 'yellow' }}>
+        <div style = {{ width: '800px', display : 'flex', flexDirection : 'row', justifyContent : 'center', gap : '10px', marginBottom : '20px', padding : '10px', backgroundColor : 'blue', borderRadius : '10px', border : '1px solid #ccc'}}>
+          <button onClick={toggleEraserMode} style={{ margin: '5px' }}>
+            {isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}
+          </button>
+          <button onClick={handleClearAll} style={{ margin: '5px' }}><DeleteIcon /></button>
+          <button onClick={handleUndo} style={{ margin: '5px' }}><UndoIcon /></button>
+          <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
+          <button onClick={saveCanvas} style={{ margin: '5px' }}>확인</button>
+          <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
+        </div>
+        <canvas
+          ref={canvasRef}
+          width={800}
+          height={600}
+          style={{ border: '1px solid #000', backgroundColor: 'white' }}
+          onTouchMove={(e) => {
+            e.preventDefault();
+          }}
+        />
       </div>
     );
+    
 };
 
 export default DrawMyDayPad;
