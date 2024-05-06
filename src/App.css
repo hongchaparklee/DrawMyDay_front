@@ -16,8 +16,13 @@
 
 .my-page {
   font-family: 'KCCMurukmuruk', sans-serif;
-}
+} 
 
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #F8F5EA;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

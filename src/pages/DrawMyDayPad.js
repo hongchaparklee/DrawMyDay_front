@@ -189,8 +189,8 @@ const DrawMyDayPad = () => {
     };
     
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', backgroundColor : 'yellow' }}>
-        <div style = {{ width: '800px', display : 'flex', flexDirection : 'row', justifyContent : 'center', gap : '10px', marginBottom : '20px', padding : '10px', backgroundColor : 'blue', borderRadius : '10px', border : '1px solid #ccc'}}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+        <div style = {{ width: '800px', display : 'flex', flexDirection : 'row', justifyContent : 'center', gap : '10px', marginBottom : '20px', padding : '10px', backgroundColor : '#AED9E0', borderRadius : '10px', border : '1px solid #ccc'}}>
           <button onClick={toggleEraserMode} style={{ margin: '5px' }}>
             {isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}
           </button>
@@ -211,6 +211,9 @@ const DrawMyDayPad = () => {
         />
       </div>
     );
+
+
+    
     
 };
 
