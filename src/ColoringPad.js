@@ -20,15 +20,12 @@ const ColoringPad = () => {
   let navigate = useNavigate();
   
   const goToCompletePad = () => {
-    // 사용자에게 확인을 요청하는 대화 상자를 띄웁니다.
     const isConfirmed = window.confirm("정말 정말 완성하셨습니까?");
   
     if (isConfirmed) {
       const canvas = canvasRef.current;
-      // 캔버스의 이미지 데이터를 URL 형식으로 가져옵니다.
       const imageDataUrl = canvas.toDataURL("image/png");
       
-      // 사용자가 'Yes'를 선택한 경우, React Router의 navigate 함수를 사용하여 데이터를 다음 페이지에 상태로 전달합니다.
       navigate('/complete', { state: { imageDataUrl } });
     }
   }

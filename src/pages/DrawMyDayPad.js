@@ -8,6 +8,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import onegoearth from '../assets/onegoearth.png';
 
+
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
@@ -41,20 +42,35 @@ const DrawMyDayPad = () => {
     }
   };
   
-  const saveCanvas = () => {
+  const saveAndSendCanvas = () => {
     invertColors(); // 색상 반전 처리
   
     const canvas = canvasRef.current;
     if (canvas) {
       const imageDataUrl = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.href = imageDataUrl;
-      link.download = 'canvas-image.png'; // 저장될 파일 이름 지정
-      document.body.appendChild(link); 
-      link.click();
-      document.body.removeChild(link); 
+      // JSON으로 서버로 데이터를 보내는 부분
+      const imageJsonData = {
+        image: imageDataUrl // 이미지 데이터를 Base64 인코딩된 문자열로 저장
+      };
+  
+      // fetch API를 사용하여 서버로 JSON 보내기
+      fetch('http://localhost:4000/images', { // 서버의 엔드포인트 주소로 변경
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(imageJsonData) // JSON 데이터 -> 문자열로 변환
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data); 
+      })
+      .catch((error) => {
+        console.error('Error:', error);       });
     }
   };
+  
+  
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -140,18 +156,16 @@ const DrawMyDayPad = () => {
       context.globalCompositeOperation = 'destination-out';
       context.lineWidth = 10; // 지우개 크기 조절가능
     }
-    isEraserModeRef.current = !isEraserModeRef.current; // 모드 토글
+    isEraserModeRef.current = !isEraserModeRef.current; 
     };
     
     const handleClearAll = () => {
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
-      // 캔버스를 클리어합니다.
       context.clearRect(0, 0, canvas.width, canvas.height);
-      // pathRef를 초기화합니다.
       pathRef.current = [];
     
-      // 배경 이미지를 다시 그립니다.
+      // 배경 이미지를 다시 그림
       const image = new Image();
       image.onload = function() {
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -197,7 +211,7 @@ const DrawMyDayPad = () => {
           <button onClick={handleClearAll} style={{ margin: '5px' }}><DeleteIcon /></button>
           <button onClick={handleUndo} style={{ margin: '5px' }}><UndoIcon /></button>
           <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
-          <button onClick={saveCanvas} style={{ margin: '5px' }}>확인</button>
+          <button onClick={saveAndSendCanvas} style={{ margin: '5px' }}>확인</button>
           <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
         </div>
         <canvas
