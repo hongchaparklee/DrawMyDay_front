@@ -16,10 +16,11 @@ const DrawMyDayPad = () => {
   const [penSize] = useState(2);
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
-  const [imageList, setImageList] = useState([]);
+  // const [setImageList] = useState([]);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
-  
+  const [setSavedImage] = useState('');
+
   let navigate = useNavigate();
 
   const goToColoringPad = () => {
@@ -43,55 +44,55 @@ const DrawMyDayPad = () => {
     }
   };
 
-  const fetchImageList = () => {
-    fetch('http://18.189.193.41/upload')
-      .then(response => response.json())
-      .then(data => {
-        setImageList(data);
-      })
-      .catch(error => console.error('Error:', error));
-  };
+  // const fetchImageList = () => {
+  //   fetch('http://18.189.193.41/upload')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setImageList(data);
+  //     })
+  //     .catch(error => console.error('Error:', error));
+  // };
 
   const saveAndSendCanvas = () => {
     invertColors(); // 색상 반전 처리
   
     const canvas = canvasRef.current;
     if (canvas) {
-      const imageDataUrl = canvas.toDataURL('image/png');
-      // JSON으로 서버로 데이터를 보내는 부분
-      const imageJsonData = {
-        image: imageDataUrl // 이미지 데이터를 Base64 인코딩된 문자열로 저장
-      };
-      
-      // fetch API를 사용하여 서버로 JSON 보내기
-      fetch('/upload', { // 서버의 엔드포인트 주소로 변경
+      canvas.toBlob(blob => {
+        const formData = new FormData(); //FormData 객체 생성
+        formData.append('file', blob, 'test1');
+
+      // fetch API를 사용하여 서버로 FormData 보내기
+      fetch('http://18.189.193.41/upload', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', 
-        },
-        body: JSON.stringify(imageJsonData) // JSON 데이터 -> 문자열로 변환
+        body : formData 
       })
-      .then(response => response.text()) // 서버로부터의 응답을 텍스트로 변환
+      .then(response => {
+        if (!response.ok){
+          throw new Error('not ok');
+        }
+        return response.json();
+      })
       .then(data => {
-        if(data === 'success') {
+        if(data.message === 'Image uploaded successfully') {
           console.log('이미지가 성공적으로 전송되었습니다.', data);
-          fetchImageList(); // 이미지 목록을 새로고침
         } else {
-        console.error('이미지 전송 실패:', data);
+          console.error('이미지 전송 실패:', data);
         }
       })
       .catch((error) => {
         console.error('Error:', error);
-      }
-    );
-  }};
+      });
+    }, 'image/png');
+  }
+};
+
 
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    fetchImageList();
     setStateStack([imageData]);
 
     
@@ -219,6 +220,15 @@ const DrawMyDayPad = () => {
         setStateStack((prev) => [...prev, nextState]);
       }
     };
+
+    const saveImageToState = () => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const imageDataUrl = canvas.toDataURL('image/png'); // 이미지 데이터를 URL로 변환
+        setSavedImage(imageDataUrl); // 상태 변수에 저장
+        console.log('이미지 저장됨');
+      }
+    };
     
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
@@ -231,12 +241,10 @@ const DrawMyDayPad = () => {
           <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
           <button onClick={saveAndSendCanvas} style={{ margin: '5px' }}>확인</button>
           <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
+          <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> {/* 이미지 저장 함수 호출 */}
         </div>
-        <div>
-        {imageList.map((imageData, index) => (
-          <img key={index} src={imageData.image} alt={`Canvas ${index}`} />
-        ))}
-        </div>
+        
+
         <canvas
           ref={canvasRef}
           width={800}

@@ -21,7 +21,6 @@ function MemoryPad() {
     ctx.strokeStyle = color;
     ctx.lineWidth = 5;
 
-    // 마우스 위치 계산
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
