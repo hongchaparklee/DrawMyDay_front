@@ -12,7 +12,7 @@ const CompletePad = () => {
     };
 
     useEffect(() => {
-        const imageUrl = '서버이미지데이터엔드포인트URL';
+        const imageUrl = '주소주소주소';
         fetch(imageUrl)
             .then((response) => response.json())
             .then((data) => {
