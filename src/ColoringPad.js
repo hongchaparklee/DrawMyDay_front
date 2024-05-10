@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom'; 
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
+import { useImage } from './pages/ImageContext';
 
 const ColoringPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -16,8 +17,9 @@ const ColoringPad = () => {
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
+  const { imageUrl } = useImage();
 
-  let navigate = useNavigate();
+  let navigate = useNavigate();  
   
   const goToCompletePad = () => {
     const isConfirmed = window.confirm("정말 정말 완성하셨습니까?");
@@ -35,7 +37,7 @@ const ColoringPad = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-  setStateStack([imageData]);
+    setStateStack([imageData]);
 
   const handleCanvasTouchStart = (e) => {
     const rect = canvas.getBoundingClientRect();
@@ -181,6 +183,9 @@ const ColoringPad = () => {
             style={{ backgroundColor: 'white' }}
             onTouchMove={(e) => e.preventDefault()}
           />
+        <div>
+          {imageUrl && <img src={imageUrl} alt="Uploaded Drawing" style={{ marginTop: '20px' }} />}
+        </div>
         </div>
       );
       

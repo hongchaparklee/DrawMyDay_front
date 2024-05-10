@@ -7,7 +7,8 @@ import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import onegoearth from '../assets/onegoearth.png';
-
+import axios from 'axios';
+import { useImage } from './ImageContext';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -16,7 +17,7 @@ const DrawMyDayPad = () => {
   const [penSize] = useState(2);
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
-  // const [setImageList] = useState([]);
+  const {setImageUrl} = useImage();
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
   const [setSavedImage] = useState('');
@@ -44,15 +45,6 @@ const DrawMyDayPad = () => {
     }
   };
 
-  // const fetchImageList = () => {
-  //   fetch('http://18.189.193.41/upload')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setImageList(data);
-  //     })
-  //     .catch(error => console.error('Error:', error));
-  // };
-
   const saveAndSendCanvas = () => {
     invertColors(); // 색상 반전 처리
   
@@ -60,32 +52,24 @@ const DrawMyDayPad = () => {
     if (canvas) {
       canvas.toBlob(blob => {
         const formData = new FormData(); //FormData 객체 생성
-        formData.append('file', blob, 'test1');
+        formData.append('file', blob, 'test5555.png'); // 파일 이름에 확장자명 추가
 
-      // fetch API를 사용하여 서버로 FormData 보내기
-      fetch('http://18.189.193.41/upload', {
-        method: 'POST',
-        body : formData 
-      })
-      .then(response => {
-        if (!response.ok){
-          throw new Error('not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        if(data.message === 'Image uploaded successfully') {
-          console.log('이미지가 성공적으로 전송되었습니다.', data);
-        } else {
-          console.error('이미지 전송 실패:', data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    }, 'image/png');
-  }
-};
+        axios.post('http://18.189.193.41/upload', formData, {
+          headers : {
+            'ConTent-Type' : 'multipart/form-data'
+          }
+        })
+        .then(response => {
+            console.log('이미지가 성공적으로 전송되었습니다.', response.data);
+            setImageUrl(response.data.image_url);
+            console.log('서버 응답:', response.data.image_url);
+          })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }, 'image/png');
+    }
+  };
 
 
 
@@ -229,7 +213,23 @@ const DrawMyDayPad = () => {
         console.log('이미지 저장됨');
       }
     };
+
+    async function handleSaveSendAndGo() {
+      try {
+        console.log('이미지 전송을 시작합니다.');
+        await saveAndSendCanvas();
+        console.log('이미지 전송이 완료되었습니다. 다음 페이지로 이동합니다.');
+        goToColoringPad();
+      } catch (error) {
+        console.error('이미지 전송에 실패했습니다:', error);
+      }
+    }
     
+    
+    
+    
+    
+
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
         <div style = {{ width: '800px', display : 'flex', flexDirection : 'row', justifyContent : 'center', gap : '10px', marginBottom : '20px', padding : '10px', backgroundColor : '#AED9E0', borderRadius : '10px', border : '1px solid #ccc'}}>
@@ -241,6 +241,7 @@ const DrawMyDayPad = () => {
           <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
           <button onClick={saveAndSendCanvas} style={{ margin: '5px' }}>확인</button>
           <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
+          <button onClick={handleSaveSendAndGo} style={{ margin: '5px' }}>확인 및 다음</button>
           <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> {/* 이미지 저장 함수 호출 */}
         </div>
         
