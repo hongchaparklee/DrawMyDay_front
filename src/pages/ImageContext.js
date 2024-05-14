@@ -6,10 +6,11 @@ const ImageContext = createContext();
 export const useImage = () => useContext(ImageContext);
 
 export const ImageProvider = ({ children }) => {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrls, setImageUrls] = useState([]);
+  const [selectedImageUrl, setSelectedImageUrl] = useState('');
 
   return (
-    <ImageContext.Provider value={{ imageUrl, setImageUrl }}>
+    <ImageContext.Provider value={{ imageUrls, setImageUrls, selectedImageUrl, setSelectedImageUrl }}>
       {children}
     </ImageContext.Provider>
   );

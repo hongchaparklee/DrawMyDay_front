@@ -1,55 +1,74 @@
-// MemoryPad.js
-import React, { useRef, useState } from 'react';
+//MemoryPad.js
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function MemoryPad() {
-  const canvasRef = useRef(null);
-  const [color, setColor] = useState('#000000');
-  let isPainting = false;
+const MemoryPad = () => {
+    const [memories, setMemories] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const navigate = useNavigate();
 
-  const startPainting = (e) => {
-    isPainting = true;
-    draw(e);
-  };
+    useEffect(() => {
+        const loadedMemories = JSON.parse(localStorage.getItem('memories')) || [];
+        setMemories(loadedMemories);
+        setCurrentIndex(loadedMemories.length - 1);
+    }, []);
 
-  const stopPainting = () => {
-    isPainting = false;
-  };
+    const handlePrev = () => {
+        setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+    };
 
-  const draw = (e) => {
-    if (!isPainting) return;
-    const ctx = canvasRef.current.getContext('2d');
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 5;
+    const handleNext = () => {
+        setCurrentIndex((prevIndex) => (prevIndex < memories.length - 1 ? prevIndex + 1 : prevIndex));
+    };
 
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const navigateToMainPage = () => navigate('/');
 
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  };
+    const buttonStyle = {
+        backgroundColor: '#FFC0CB',
+        color: 'white',
+        border: 'none',
+        padding: '10px 20px',
+        fontSize: '16px',
+        cursor: 'pointer',
+        borderRadius: '20px'
+    };
 
-  const changeColor = (e) => {
-    setColor(e.target.value);
-  };
+    const mainPageButtonStyle = {
+        ...buttonStyle,
+        margin: '10px auto',
+        display: 'block' 
+    };
 
-  return (
-    <div>
-      <canvas
-        onMouseDown={startPainting}
-        onMouseUp={stopPainting}
-        onMouseMove={draw}
-        onMouseOut={stopPainting}
-        ref={canvasRef}
-        width={800}
-        height={600}
-        style={{ border: '1px solid #000' }}
-      />
-      <input type="color" onChange={changeColor} value={color} />
-    </div>
-  );
+    const dateDisplayStyle = {
+        position: 'absolute',
+        right: 0,
+        top: '-30px',
+        fontFamily: 'KCCMurukmuruk',
+        fontSize: '20px',
+        backgroundColor: '#F8F5EA',
+        padding: '5px'
+    };
+
+    return (
+        <div style={{ textAlign: 'center', position: 'relative', marginTop: '20px' }}>
+            <h1 style={{ fontFamily: 'KCCMurukmuruk' }}>내 추억 보기</h1>
+            {memories.length > 0 && (
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <div style={dateDisplayStyle}>
+                        {memories[currentIndex].date}
+                    </div>
+                    <button onClick={handlePrev} style={{ ...buttonStyle, position: 'absolute', top: '50%', left: '-50px', transform: 'translateY(-50%)' }}>◁</button>
+                    <div>
+                        {memories[currentIndex].images.map((image, index) => (
+                            <img key={index} src={image} alt={`memory-${index}`} style={{ width: '400px', height: '400px', margin: '0 10px' }}/>
+                        ))}
+                    </div>
+                    <button onClick={handleNext} style={{ ...buttonStyle, position: 'absolute', top: '50%', right: '-50px', transform: 'translateY(-50%)' }}>▷</button>
+                    <button onClick={navigateToMainPage} style={mainPageButtonStyle}>메인 페이지로</button>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default MemoryPad;

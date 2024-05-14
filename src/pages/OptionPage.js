@@ -1,11 +1,13 @@
 // OptionPage.js
+
 import React from 'react';
+import OptionPad from './OptionPad';
 
 const OptionPage = () => {
   return (
     <div>
       <h2>Option Page</h2>
-      {"아직 안만들었어 나가"}
+      <OptionPad />
     </div>
   );
 };

@@ -17,7 +17,7 @@ const ColoringPad = () => {
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
-  const { imageUrl } = useImage();
+  const { imageUrls, setSelectedImageUrl, selectedImageUrl } = useImage();
 
   let navigate = useNavigate();  
   
@@ -26,7 +26,7 @@ const ColoringPad = () => {
   
     if (isConfirmed) {
       const canvas = canvasRef.current;
-      const imageDataUrl = canvas.toDataURL("image/png");
+      const imageDataUrl = canvas.toDataURL("image/png", 0.3);
       
       navigate('/complete', { state: { imageDataUrl } });
     }
@@ -93,10 +93,7 @@ const ColoringPad = () => {
     const handleColorClick = (predefinedColor) => {
       setColor(predefinedColor);
     };
-    
-    
-    
-    
+
     const toggleEraserMode = () => {
     isEraserModeRef.current = !isEraserModeRef.current;
     setPenSize(isEraserModeRef.current ? 20 : 5);
@@ -156,7 +153,6 @@ const ColoringPad = () => {
               <button onClick={handleRedo} style={{ margin: '1px' }}><RedoIcon /></button>
               <button onClick={goToCompletePad} style={{ margin: '1px' }}>완성</button>
               
-              {/* 색상 선택기 컨테이너 */}
               <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap' }}>
                 {predefinedColors.map((predefinedColor) => (
                   <button
@@ -183,13 +179,19 @@ const ColoringPad = () => {
             style={{ backgroundColor: 'white' }}
             onTouchMove={(e) => e.preventDefault()}
           />
-        <div>
-          {imageUrl && <img src={imageUrl} alt="Uploaded Drawing" style={{ marginTop: '20px' }} />}
+          <div>
+            {imageUrls.map((url, index) => (
+            <img key={index} src={url} alt={`Uploaded Drawing ${index + 1}`} onClick={() => setSelectedImageUrl(url)} style={{ marginTop: '20px', cursor: 'pointer' }} />
+          ))}
+          {selectedImageUrl && (
+            <div>
+              <h2>Selected Image</h2>
+              <img src={selectedImageUrl} alt="Selected Drawing" style={{ marginTop: '20px' }} />
+            </div>
+          )}
         </div>
-        </div>
-      );
-      
-    
+      </div>
+    );
 };
   
-  export default ColoringPad;
+export default ColoringPad;

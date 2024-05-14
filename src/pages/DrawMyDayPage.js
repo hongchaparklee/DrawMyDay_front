@@ -1,4 +1,5 @@
 // DrawMyDayPage.js
+
 import React from 'react';
 import DrawMyDayPad from './DrawMyDayPad';
 

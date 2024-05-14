@@ -6,9 +6,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
-import onegoearth from '../assets/onegoearth.png';
+import KakaoTalk_20240510_211849584 from '../assets/KakaoTalk_20240510_211849584.png';
 import axios from 'axios';
-import { useImage } from './ImageContext';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -17,7 +16,6 @@ const DrawMyDayPad = () => {
   const [penSize] = useState(2);
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
-  const {setImageUrl} = useImage();
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
   const [setSavedImage] = useState('');
@@ -46,30 +44,34 @@ const DrawMyDayPad = () => {
   };
 
   const saveAndSendCanvas = () => {
-    invertColors(); // 색상 반전 처리
+    invertColors(); 
   
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.toBlob(blob => {
-        const formData = new FormData(); //FormData 객체 생성
-        formData.append('file', blob, 'test5555.png'); // 파일 이름에 확장자명 추가
-
-        axios.post('http://18.189.193.41/upload', formData, {
+        const formData = new FormData(); 
+        formData.append('file', blob, 'sex.png'); 
+  
+        const userInfo = localStorage.getItem('userInfo');
+        if (userInfo) {
+          formData.append('userInfo', userInfo);
+        }
+  
+        axios.post('http://192.168.35.130/Users/yuria20/Desktop/yuria_workspace/DrawMyDay_AI/upload', formData, {
           headers : {
-            'ConTent-Type' : 'multipart/form-data'
+            'Content-Type': 'multipart/form-data' 
           }
         })
         .then(response => {
-            console.log('이미지가 성공적으로 전송되었습니다.', response.data);
-            setImageUrl(response.data.image_url);
-            console.log('서버 응답:', response.data.image_url);
-          })
+          console.log('이미지와 사용자 정보가 성공적으로 전송되었습니다.', response.data);
+        })
         .catch((error) => {
           console.error('Error:', error);
         });
       }, 'image/png');
     }
   };
+  
 
 
 
@@ -85,7 +87,7 @@ const DrawMyDayPad = () => {
     image.onload = function(){
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
     };
-    image.src = onegoearth;
+    image.src = KakaoTalk_20240510_211849584;
 
     const initializeDrawingSettings = () => {
         context.strokeStyle = color; 
@@ -154,11 +156,12 @@ const DrawMyDayPad = () => {
     if (isEraserModeRef.current) {
       // 지우개 모드 해제: 그림그리게 함
       context.globalCompositeOperation = 'source-over';
-    } else {
-      // 지우개 모드 활성화: 지우개모드로
-      context.globalCompositeOperation = 'destination-out';
-      context.lineWidth = 10; // 지우개 크기 조절가능
-    }
+    } else
+      {
+        // 지우개 모드 활성화: 지우개모드로
+        context.globalCompositeOperation = 'destination-out';
+        context.lineWidth = 10; // 지우개 크기
+      }
     isEraserModeRef.current = !isEraserModeRef.current; 
     };
     
@@ -173,7 +176,7 @@ const DrawMyDayPad = () => {
       image.onload = function() {
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
       };
-      image.src = onegoearth; // 이전에 설정한 이미지 경로를 사용합니다.
+      image.src = KakaoTalk_20240510_211849584;
     };
     
 
@@ -244,8 +247,6 @@ const DrawMyDayPad = () => {
           <button onClick={handleSaveSendAndGo} style={{ margin: '5px' }}>확인 및 다음</button>
           <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> {/* 이미지 저장 함수 호출 */}
         </div>
-        
-
         <canvas
           ref={canvasRef}
           width={800}

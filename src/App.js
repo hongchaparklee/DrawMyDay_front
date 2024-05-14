@@ -1,20 +1,21 @@
 // App.js
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import ColoringPad from './ColoringPad';
-import OptionPage from './pages/OptionPage';
 import MemoryPage from './pages/MemoryPage';
 import CompletePage from './pages/CompletePage';
 import DrawMyDayPad from './pages/DrawMyDayPad';
+import OptionPad from './pages/OptionPad';
 import { ImageProvider } from './pages/ImageContext';
 
 function App() {
   return (
     <Router>
-      <ImageProvider> {/* ImageProvider를 Router 안으로 이동 */}
+      <ImageProvider>
         <Routes>
-          <Route path="/option" element={<OptionPage />} />
+          <Route path="/option" element={<OptionPad />} />
           <Route path="/" element={<MainPage />} />
           <Route path="/coloring" element={<ColoringPad />} />
           <Route path="/memory" element={<MemoryPage />} />

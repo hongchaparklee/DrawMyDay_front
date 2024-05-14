@@ -1,4 +1,5 @@
 // ColoringPage.js
+
 import React from 'react';
 import ColoringPad from '../ColoringPad';
 

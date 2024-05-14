@@ -54,7 +54,6 @@ html, body {
   }
 }
 
-/* App.css에 추가 */
 .main-container {
   display: flex;
   flex-direction: column;
@@ -88,3 +87,42 @@ html, body {
   font-size: 30px;
   margin-bottom: 10px;
 }
+
+.gallery {
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 10px; 
+}
+
+.grid-item {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+
+.grid-item:hover {
+  transform: scale(1.05);
+}
+
+.preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.preview-image {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
