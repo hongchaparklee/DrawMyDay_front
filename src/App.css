@@ -126,3 +126,24 @@ html, body {
   max-height: 90vh;
 }
 
+/* 기본 스타일 */
+.container {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 화면 너비가 768px 이상일 때 적용될 스타일 */
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+    margin: 0 auto;
+  }
+}
+
+/* 화면 너비가 1024px 이상일 때 적용될 스타일 */
+@media (min-width: 1024px) {
+  .container {
+    width: 970px;
+  }
+}

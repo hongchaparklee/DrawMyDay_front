@@ -8,6 +8,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import KakaoTalk_20240510_211849584 from '../assets/KakaoTalk_20240510_211849584.png';
 import axios from 'axios';
+import { useImage } from './ImageContext';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -19,6 +20,7 @@ const DrawMyDayPad = () => {
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
   const [setSavedImage] = useState('');
+  const { setSelectedImageUrl } = useImage(); 
 
   let navigate = useNavigate();
 
@@ -50,25 +52,22 @@ const DrawMyDayPad = () => {
     if (canvas) {
       canvas.toBlob(blob => {
         const formData = new FormData(); 
-        formData.append('file', blob, 'sex.png'); 
+        formData.append('file', blob, 'paper.png'); 
   
-        const userInfo = localStorage.getItem('userInfo');
-        if (userInfo) {
-          formData.append('userInfo', userInfo);
-        }
-  
-        axios.post('http://192.168.35.130/Users/yuria20/Desktop/yuria_workspace/DrawMyDay_AI/upload', formData, {
+        axios.post('http://18.189.193.41/upload', formData, {
           headers : {
             'Content-Type': 'multipart/form-data' 
           }
         })
         .then(response => {
-          console.log('이미지와 사용자 정보가 성공적으로 전송되었습니다.', response.data);
+          console.log('이미지가 성공적으로 전송되었습니다.', response.data);
+          setSelectedImageUrl(response.data.image_urls); 
+          console.log('서버 응답:', response.data.image_urls);
         })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      }, 'image/png');
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }, 'image/png');
     }
   };
   
