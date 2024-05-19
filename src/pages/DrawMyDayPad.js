@@ -46,32 +46,48 @@ const DrawMyDayPad = () => {
   };
 
   const saveAndSendCanvas = () => {
-    invertColors(); 
+    invertColors();
   
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.toBlob(blob => {
-        const formData = new FormData(); 
-        formData.append('file', blob, 'paper.png'); 
+        const formData = new FormData();
+        formData.append('file', blob, 'paper.png');
   
         axios.post('http://18.189.193.41/upload', formData, {
-          headers : {
-            'Content-Type': 'multipart/form-data' 
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then(response => {
           console.log('이미지가 성공적으로 전송되었습니다.', response.data);
-          setSelectedImageUrl(response.data.image_urls); 
-          console.log('서버 응답:', response.data.image_urls);
+          const imageUrl = response.data.image_urls;
+          console.log('서버로부터 받은 이미지 URL:', imageUrl);
+          console.log('서버 응답:', response);
+  
+          fetch(imageUrl)
+            .then(res => {
+              console.log('fetch 응답:', res);
+              return res.blob();
+            })
+            .then(blob => {
+              const localUrl = URL.createObjectURL(blob);
+              setSelectedImageUrl(localUrl);
+              console.log('로컬 URL:', localUrl);
+            })
+            .catch(fetchError => {
+              console.error('fetch 오류:', fetchError);
+            });
         })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    }, 'image/png');
+        .catch((error) => {
+          console.error('이미지 업로드 오류:', error);
+        });
+      }, 'image/png');
+    } else {
+      console.error('캔버스가 존재하지 않습니다.');
     }
   };
   
-
 
 
   useEffect(() => {

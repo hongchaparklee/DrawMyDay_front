@@ -18,8 +18,7 @@ const ColoringPad = () => {
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
-  const { imageUrls, setSelectedImageUrl, selectedImageUrl } = useImage();
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const { imageUrls } = useImage();
 
   let navigate = useNavigate();  
   
@@ -34,13 +33,31 @@ const ColoringPad = () => {
     }
   }
 
-  const handleSelectImage = (url) => {
-    setSelectedImageUrl(url);
-    setImageLoaded(false); // 이미지 선택 시 로딩 상태 초기화
-  };
+  const loadImageOnCanvas = (imageFile) => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      console.error('캔버스가 존재하지 않습니다');
+      return;
+    }
+    const context = canvas.getContext('2d');
+  
+    // 이미지 객체 생성
+    const img = new Image();
+    img.onload = () => {
+      console.log('이미지 로드 완료 : ', imageFile);
+      context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스를 초기화
+      context.drawImage(img, 0, 0, canvas.width, canvas.height); // 이미지를 캔버스에 그림
+    };
+    img.onerror = (error) => {
+      console.error('이미지 로드 에러:', error);
+    };
+    img.src = imageFile; // 로컬 URL을 이미지 소스로 설정
+};
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const context = canvas.getContext('2d');
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     setStateStack([imageData]);
@@ -100,10 +117,7 @@ const ColoringPad = () => {
     const handleColorClick = (predefinedColor) => {
       setColor(predefinedColor);
     };
-    
-    
-    
-    
+
     const toggleEraserMode = () => {
     isEraserModeRef.current = !isEraserModeRef.current;
     setPenSize(isEraserModeRef.current ? 20 : 5);
@@ -119,6 +133,7 @@ const ColoringPad = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     pathRef.current = [];
     };
+
     const handleUndo = () => {
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
@@ -183,43 +198,22 @@ const ColoringPad = () => {
             </div>
           </div>
         </div>
-        {!imageLoaded && (
-        <canvas
-          ref={canvasRef}
-          width={800}
-          height={600}
-          style={{ backgroundColor: 'white' }}
-        />
-      )}
-      
-      {selectedImageUrl && (
-        <img
-          src={selectedImageUrl}
-          alt="Selected Drawing"
-          style={{
-            marginTop: '20px',
-            maxWidth: '800px',
-            maxHeight: '600px',
-            objectFit: 'contain',
-            display: imageLoaded ? 'block' : 'none' // 이미지 로딩 상태에 따라 표시 여부 결정
-          }}
-          onLoad={() => setImageLoaded(true)} // 이미지 로딩 완료 시 로딩 상태 업데이트
-        />
-      )}
-      
-      {/* 이미지 선택 시 handleSelectImage 함수 사용 */}
-      <div>
-      {imageUrls.map((url, index) => (
-        <img
-          key={index}
-          src={`${url}?${new Date().getTime()}`}
-          alt={`Uploaded Drawing ${index + 1}`}
-          crossOrigin="anonymous"
-          onClick={() => handleSelectImage(url)}
-          style={{ cursor: 'pointer' }}
-        />
-      ))}
-      </div>
+        <div>
+        {imageUrls.map((url, index) => (
+    <img
+      key={index}
+      src={url}
+      alt={`Uploaded Drawing ${index + 1}`}
+      crossOrigin="anonymous"
+      onClick={() => {
+        console.log(`이미지 클릭됨: ${url}`);
+        loadImageOnCanvas(url);
+      }} // 클릭 시 캔버스에 로드
+      style={{ cursor: 'pointer' }}
+    />
+))}
+
+</div>
     </div>
   );
 };
