@@ -53,6 +53,11 @@ const DrawMyDayPad = () => {
       canvas.toBlob(blob => {
         const formData = new FormData();
         formData.append('file', blob, 'paper.png');
+      
+        const userInfo = localStorage.getItem('userInfo');
+          if (userInfo) {
+            formData.append('userInfo', userInfo);
+          }
   
         axios.post('http://18.189.193.41/upload', formData, {
           headers: {

@@ -1,6 +1,7 @@
 // // OptionPad.js
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserInfoForm = () => {
   const [userInfo, setUserInfo] = useState({
@@ -10,6 +11,8 @@ const UserInfoForm = () => {
     gender: '',
     glasses: false,
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -34,8 +37,14 @@ const UserInfoForm = () => {
     console.log(dataToSend);
     // 로컬 저장소에 userInfo 저장
     localStorage.setItem('userInfo', dataToSend);
+
+    alert("저장된건가?");
+
+    navigateToMemoryPad();
   };
   
+  const navigateToMemoryPad = () => navigate('/');
+
   const formStyle = {
     display: 'flex',
     flexDirection: 'column',
