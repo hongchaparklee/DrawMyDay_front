@@ -27,7 +27,7 @@ const ColoringPad = () => {
   
     if (isConfirmed) {
       const canvas = canvasRef.current;
-      const imageDataUrl = canvas.toDataURL("image/png");
+      const imageDataUrl = canvas.toDataURL("image/png", 0.3);
       
       navigate('/complete', { state: { imageDataUrl } });
     }
@@ -176,7 +176,7 @@ const ColoringPad = () => {
             <button onClick={handleClearAll} style={{ margin: '3px' }}><DeleteIcon /></button>
             <button onClick={handleUndo} style={{ margin: '1px' }}><UndoIcon /></button>
             <button onClick={handleRedo} style={{ margin: '1px' }}><RedoIcon /></button>
-            <button onClick={goToCompletePad} style={{ margin: '1px' }}>완성</button>
+            <button onClick={goToCompletePad} style={{ margin: '5px' }}>완성</button>
             
             {/* 색상 선택기 컨테이너 */}
             <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap' }}>
