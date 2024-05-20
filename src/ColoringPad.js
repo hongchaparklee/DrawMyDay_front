@@ -199,24 +199,22 @@ const ColoringPad = () => {
           </div>
         </div>
         <div>
-        {imageUrls.map((url, index) => (
-    <img
-      key={index}
-      src={url}
-      alt={`Uploaded Drawing ${index + 1}`}
-      crossOrigin="anonymous"
-      onClick={() => {
-        console.log(`이미지 클릭됨: ${url}`);
-        loadImageOnCanvas(url);
-      }} // 클릭 시 캔버스에 로드
-      style={{ cursor: 'pointer' }}
-    />
-))}
-
-</div>
-    </div>
+          {imageUrls.map((url, index) => (
+            <img
+              key={index}
+              src={url}
+              alt={`Uploaded Drawing ${index + 1}`}
+              crossOrigin="anonymous"
+              onClick={() => {
+                console.log(`이미지 클릭됨: ${url}`);
+                loadImageOnCanvas(url);
+              }} // 클릭 시 캔버스에 로드
+              style={{ cursor: 'pointer' }}
+            />
+          ))}
+        </div>
+     </div>
   );
 };
-      
-  
+
   export default ColoringPad;

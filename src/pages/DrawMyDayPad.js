@@ -247,11 +247,6 @@ const DrawMyDayPad = () => {
         console.error('이미지 전송에 실패했습니다:', error);
       }
     }
-    
-    
-    
-    
-    
 
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>

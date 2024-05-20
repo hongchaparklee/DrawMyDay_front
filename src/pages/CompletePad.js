@@ -54,15 +54,35 @@ const CompletePad = () => {
     };
 
     useEffect(() => {
-        const imageUrl = '주소주소주소';
+        const imageUrl = '@@@@@@@서버 이미지 주소@@@@@@@';
         fetch(imageUrl)
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // JSON인지 Blob인지 판별
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json(); // JSON 응답 처리
+                } else {
+                    return response.blob(); // Blob 응답 처리
+                }
+            })
             .then((data) => {
-                setAdditionalImageDataUrl(data.image); 
+                if (data instanceof Blob) {
+                    // Blob 데이터를 처리
+                    const imageObjectURL = URL.createObjectURL(data);
+                    setAdditionalImageDataUrl(imageObjectURL);
+                } else if (data.image) {
+                    // JSON 데이터를 처리
+                    setAdditionalImageDataUrl(data.image);
+                } else {
+                    throw new Error('Unexpected response format');
+                }
             })
             .catch((error) => console.error('Error:', error));
     }, []);
-
+    
     const saveToMemory = () => {
         const memories = JSON.parse(localStorage.getItem('memories')) || [];
         const newMemory = {
