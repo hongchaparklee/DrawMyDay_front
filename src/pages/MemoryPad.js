@@ -36,7 +36,8 @@ const MemoryPad = () => {
     const mainPageButtonStyle = {
         ...buttonStyle,
         margin: '10px auto',
-        display: 'block' 
+        display: 'block',
+        fontFamily: 'KCCMurukmuruk, sans-serif',
     };
 
     const dateDisplayStyle = {

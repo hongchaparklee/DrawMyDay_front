@@ -6,14 +6,9 @@ import { FaPencilAlt, FaUserEdit, FaPhotoVideo } from 'react-icons/fa';
 import '../App.css';
 
 const LinkItem = ({ to, children, icon: Icon, color }) => {
-  const iconStyle = {
-    fontSize: '30px',
-    marginBottom: '10px',
-  };
-
   return (
     <Link to={to} className="link-item">
-      <Icon style={{ ...iconStyle, color }} />
+      <Icon className="icon-style" style={{ color }} />
       {children}
     </Link>
   );

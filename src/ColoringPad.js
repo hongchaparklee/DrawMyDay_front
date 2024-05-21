@@ -8,7 +8,6 @@ import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import { useImage } from './pages/ImageContext';
 
-
 const ColoringPad = () => {
   const [stateStack, setStateStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
@@ -54,7 +53,6 @@ const ColoringPad = () => {
     img.src = imageFile; // 로컬 URL을 이미지 소스로 설정
 };
 
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -75,7 +73,6 @@ const ColoringPad = () => {
     setIsDrawing(true);
     pathRef.current = [{ x, y }];
   };
-  
   
   const handleCanvasTouchMove = (e) => {
     if (!isDrawing) return;
@@ -109,10 +106,17 @@ const ColoringPad = () => {
     }, [color, isDrawing, penSize]);
 
     const predefinedColors = [
-      '#FFFFFF', '#FFFF00', '#FFA07A', '#FF6347', '#FF0000',
-      '#FF69B4', '#FFC0CB', '#A52A2A', '#800080', '#00008B', 
-      '#0000FF', '#00FFFF', '#008000', '#ADFF2F', '#A9A9A9', '#000000', 
+      '#E6E6FA', '#99FF99', '#FFFF00', '#FFFFFF', '#FFE4E1',
+      '#FFDAB9', '#FFD700', '#FFC0CB', '#FFB6C1', '#FFA07A',
+      '#FF69B4', '#FF6347', '#FF0000', '#FAE7B5', '#FADADD',
+      '#F4C2C2', '#CB99C9', '#ADFF2F', '#A9A9A9', '#A52A2A',
+      '#8B0000', '#800080', '#582900', '#5D3FD3', '#087830',
+      '#00FFFF', '#008000', '#00416A', '#0000FF', '#00008B',
+      '#000000'
     ];
+    
+    
+    
   
     const handleColorClick = (predefinedColor) => {
       setColor(predefinedColor);
@@ -176,7 +180,7 @@ const ColoringPad = () => {
             <button onClick={handleClearAll} style={{ margin: '3px' }}><DeleteIcon /></button>
             <button onClick={handleUndo} style={{ margin: '1px' }}><UndoIcon /></button>
             <button onClick={handleRedo} style={{ margin: '1px' }}><RedoIcon /></button>
-            <button onClick={goToCompletePad} style={{ margin: '5px' }}>완성</button>
+            <button onClick={goToCompletePad} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>완성</button>
             
             {/* 색상 선택기 컨테이너 */}
             <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap' }}>
@@ -187,7 +191,7 @@ const ColoringPad = () => {
                     backgroundColor: color === predefinedColor ? 'transparent' : predefinedColor,
                     width: 30, 
                     height: 30, 
-                    margin: '1px', 
+                    margin: '2px', 
                     border: color === predefinedColor ? `3px solid ${predefinedColor}` : '1px solid grey',
                     borderRadius: '50%',
                     boxSizing: 'border-box',
@@ -208,7 +212,7 @@ const ColoringPad = () => {
               onClick={() => {
                 console.log(`이미지 클릭됨: ${url}`);
                 loadImageOnCanvas(url);
-              }} // 클릭 시 캔버스에 로드
+              }}
               style={{ cursor: 'pointer' }}
             />
           ))}

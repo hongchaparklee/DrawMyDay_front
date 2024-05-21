@@ -37,12 +37,14 @@ const CompletePad = () => {
         cursor: 'pointer',
         borderRadius: '12px', 
         boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', // 그림자 효과
+        fontFamily: 'KCCMurukmuruk, sans-serif',
     };
 
     const smallButtonStyle = {
         ...cuteButtonStyle,
         padding: '6px 12px', 
-        fontSize: '14px', 
+        fontSize: '14px',
+        fontFamily: 'KCCMurukmuruk, sans-serif',
     };
 
     const buttonWrapperStyle = {
@@ -50,7 +52,7 @@ const CompletePad = () => {
         justifyContent: 'space-between',
         width: '100%', 
         maxWidth: '400px',
-        marginTop: '20px', 
+        marginTop: '20px',
     };
 
     useEffect(() => {

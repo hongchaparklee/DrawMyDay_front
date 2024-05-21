@@ -127,7 +127,7 @@ const UserInfoForm = () => {
           style={{ margin: '10px' }}
         />
       </div>
-      <button type="submit" style={buttonStyle}>저장해버리긔</button>
+      <button type="submit" style={{buttonStyle, fontFamily: 'KCCMurukmuruk, sans-serif'}}>저장해버리긔</button>
     </form>
   );
 };
