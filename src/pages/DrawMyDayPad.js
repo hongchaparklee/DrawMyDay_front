@@ -46,53 +46,32 @@ const DrawMyDayPad = () => {
   };
 
   const saveAndSendCanvas = () => {
-    invertColors();
+    invertColors(); 
   
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.toBlob(blob => {
-        const formData = new FormData();
-        formData.append('file', blob, 'paper.png');
-      
-        const userInfo = localStorage.getItem('userInfo');
-          if (userInfo) {
-            formData.append('userInfo', userInfo);
-          }
+        const formData = new FormData(); 
+        formData.append('file', blob, 'paper.png'); 
   
         axios.post('http://18.189.193.41/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
+          headers : {
+            'Content-Type': 'multipart/form-data' 
           }
         })
         .then(response => {
           console.log('이미지가 성공적으로 전송되었습니다.', response.data);
-          const imageUrl = response.data.image_urls;
-          console.log('서버로부터 받은 이미지 URL:', imageUrl);
-          console.log('서버 응답:', response);
-  
-          fetch(imageUrl)
-            .then(res => {
-              console.log('fetch 응답:', res);
-              return res.blob();
-            })
-            .then(blob => {
-              const localUrl = URL.createObjectURL(blob);
-              setSelectedImageUrl(localUrl);
-              console.log('로컬 URL:', localUrl);
-            })
-            .catch(fetchError => {
-              console.error('fetch 오류:', fetchError);
-            });
+          setSelectedImageUrl(response.data.image_urls); 
+          console.log('서버 응답:', response.data.image_urls);
         })
-        .catch((error) => {
-          console.error('이미지 업로드 오류:', error);
-        });
-      }, 'image/png');
-    } else {
-      console.error('캔버스가 존재하지 않습니다.');
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }, 'image/png');
     }
   };
   
+
 
 
   useEffect(() => {
@@ -247,6 +226,11 @@ const DrawMyDayPad = () => {
         console.error('이미지 전송에 실패했습니다:', error);
       }
     }
+    
+    
+    
+    
+    
 
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
@@ -259,8 +243,8 @@ const DrawMyDayPad = () => {
           <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
           <button onClick={saveAndSendCanvas} style={{ margin: '5px' }}>확인</button>
           <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
-          <button onClick={handleSaveSendAndGo} style={{ margin: '5px',fontFamily: 'KCCMurukmuruk, sans-serif'}}>일기 다 썼어요</button>
-          <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button>
+          <button onClick={handleSaveSendAndGo} style={{ margin: '5px' }}>확인 및 다음</button>
+          <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> {/* 이미지 저장 함수 호출 */}
         </div>
         <canvas
           ref={canvasRef}
