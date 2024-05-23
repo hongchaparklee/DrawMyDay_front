@@ -243,7 +243,7 @@ const DrawMyDayPad = () => {
           <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
           <button onClick={saveAndSendCanvas} style={{ margin: '5px' }}>확인</button>
           <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
-          <button onClick={handleSaveSendAndGo} style={{ margin: '5px' }}>확인 및 다음</button>
+          <button onClick={handleSaveSendAndGo} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif'}}>확인 및 다음</button>
           <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> {/* 이미지 저장 함수 호출 */}
         </div>
         <canvas
