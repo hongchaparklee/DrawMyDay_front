@@ -111,9 +111,13 @@ const ColoringPad = () => {
     }, [imageLoaded, color]);
 
     const predefinedColors = [
-      '#FFFFFF', '#FFFF00', '#FFA07A', '#FF6347', '#FF0000',
-      '#FF69B4', '#FFC0CB', '#A52A2A', '#800080', '#00008B', 
-      '#0000FF', '#00FFFF', '#008000', '#ADFF2F', '#A9A9A9', '#000000', 
+      '#E6E6FA', '#99FF99', '#FFFF00', '#FFFFFF', '#FFE4E1',
+      '#FFDAB9', '#FFD700', '#FFC0CB', '#FFB6C1', '#FFA07A',
+      '#FF69B4', '#FF6347', '#FF0000', '#FAE7B5', '#FADADD',
+      '#F4C2C2', '#CB99C9', '#ADFF2F', '#A9A9A9', '#A52A2A',
+      '#8B0000', '#800080', '#582900', '#5D3FD3', '#087830',
+      '#00FFFF', '#008000', '#00416A', '#0000FF', '#00008B',
+      '#000000'
     ];
   
     const handleColorClick = (predefinedColor) => {
