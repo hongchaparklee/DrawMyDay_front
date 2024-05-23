@@ -18,7 +18,7 @@ const ColoringPad = () => {
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
-  const { imageUrls, setSelectedImageUrl, selectedImageUrl } = useImage();
+  const { imageUrls, selectedImageUrl } = useImage();
   const [imageLoaded, setImageLoaded] = useState(false);
 
   let navigate = useNavigate();  
@@ -35,27 +35,36 @@ const ColoringPad = () => {
   }
 
   const handleSelectImage = (url) => {
-    setSelectedImageUrl(url);
-    setImageLoaded(false); // 이미지 선택 시 로딩 상태 초기화
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    const img = new Image();
+    img.crossOrigin = 'Anonymous'; // CORS 문제를 방지하기 위해
+    img.onload = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+      setImageLoaded(true); // 이미지 로드 완료 상태 업데이트
+    };
+    img.src = url;
   };
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const context = canvas.getContext('2d');
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    setStateStack([imageData]);
+    context.strokeStyle = color;
 
   const handleCanvasTouchStart = (e) => {
+    setIsDrawing(true);
     const rect = canvas.getBoundingClientRect();
     const x = e.touches[0].clientX - rect.left;
     const y = e.touches[0].clientY - rect.top;
   
-    console.log('Current color:', color);
     context.strokeStyle = isEraserModeRef.current ? canvas.style.backgroundColor : color;
     context.lineWidth = penSize;
     context.beginPath();
     context.moveTo(x, y);
-    setIsDrawing(true);
+    
     pathRef.current = [{ x, y }];
   };
   
@@ -63,6 +72,7 @@ const ColoringPad = () => {
   const handleCanvasTouchMove = (e) => {
     if (!isDrawing) return;
   
+    e.preventDefault();
     const rect = canvas.getBoundingClientRect();
     const x = e.touches[0].clientX - rect.left;
     const y = e.touches[0].clientY - rect.top;
@@ -70,17 +80,15 @@ const ColoringPad = () => {
     context.lineTo(x, y);
     context.stroke();
     pathRef.current = [...pathRef.current, { x, y }];
-  
-    e.preventDefault();
   };
-  
   const handleCanvasTouchEnd = () => {
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     setStateStack((prev) => [...prev, imageData]);
+    setIsDrawing(false);
   };
   
-  canvas.addEventListener('touchstart', handleCanvasTouchStart);
-  canvas.addEventListener('touchmove', handleCanvasTouchMove);
+  canvas.addEventListener('touchstart', handleCanvasTouchStart, { passive: false });
+  canvas.addEventListener('touchmove', handleCanvasTouchMove, { passive: false });
   canvas.addEventListener('touchend', handleCanvasTouchEnd);
   
   return () => {
@@ -91,6 +99,17 @@ const ColoringPad = () => {
   
     }, [color, isDrawing, penSize]);
 
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+  
+      const context = canvas.getContext('2d');
+      context.strokeStyle = color;
+  
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      setStateStack([imageData]);
+    }, [imageLoaded, color]);
+
     const predefinedColors = [
       '#FFFFFF', '#FFFF00', '#FFA07A', '#FF6347', '#FF0000',
       '#FF69B4', '#FFC0CB', '#A52A2A', '#800080', '#00008B', 
@@ -100,9 +119,6 @@ const ColoringPad = () => {
     const handleColorClick = (predefinedColor) => {
       setColor(predefinedColor);
     };
-    
-    
-    
     
     const toggleEraserMode = () => {
     isEraserModeRef.current = !isEraserModeRef.current;
@@ -144,11 +160,10 @@ const ColoringPad = () => {
         context.putImageData(nextState, 0, 0);
       } 
     };
-  
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-          <div style={{ width: '800px', display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc' }}>
+        <div style={{ width: '800px', display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc' }}>
             <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="15" /> : <FaEraser size="15" />}</button>
             <input
               type="range"
@@ -191,11 +206,16 @@ const ColoringPad = () => {
           style={{ backgroundColor: 'white' }}
         />
       )}
+      <div>
+        <p>이미지 로드 상태: {imageLoaded ? '완료' : '로딩 중...'}</p>
+        <p>그리기 상태: {isDrawing ? '그리는 중' : '대기 중'}</p>
+      </div>
       
       {selectedImageUrl && (
         <img
           src={selectedImageUrl}
           alt="Selected Drawing"
+          onLoad = {() => setImageLoaded(true)}
           style={{
             marginTop: '20px',
             maxWidth: '800px',
@@ -203,7 +223,6 @@ const ColoringPad = () => {
             objectFit: 'contain',
             display: imageLoaded ? 'block' : 'none' // 이미지 로딩 상태에 따라 표시 여부 결정
           }}
-          onLoad={() => setImageLoaded(true)} // 이미지 로딩 완료 시 로딩 상태 업데이트
         />
       )}
       
@@ -224,5 +243,4 @@ const ColoringPad = () => {
   );
 };
       
-  
-  export default ColoringPad;
+export default ColoringPad;
