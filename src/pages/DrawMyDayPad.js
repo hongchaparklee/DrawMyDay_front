@@ -59,7 +59,7 @@ const DrawMyDayPad = () => {
             formData.append('userInfo', userInfo);
           }
   
-        axios.post('http://18.189.193.41/upload', formData, {
+          axios.post('http://3.17.80.177/upload', formData, {
           headers : {
             'Content-Type': 'multipart/form-data' 
           }

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import { useImage } from './pages/ImageContext';
+import Modal from 'react-modal';
 
 const predefinedColors = [
   '#E6E6FA', '#99FF99', '#FFFF00', '#FFFFFF', '#FFE4E1',
@@ -17,6 +18,24 @@ const predefinedColors = [
   '#00FFFF', '#008000', '#00416A', '#0000FF', '#00008B',
   '#000000'
 ];
+
+const messages = [
+  'Tip : 일기를 쓸 때는 솔직하게 적어봐요',
+  'Tip : 횡단보도를 건널 때는 손을 들고 건너요',
+  'Tip : 엄마 말을 잘 들으면 좋은 일이 생길지도?'];
+
+const RandomMessage = () => {
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    setMessage(messages[randomIndex]);
+  }, []);
+
+  return (
+    <p style={{ fontSize: '18px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>{message}</p>
+  );
+};
 
 const ColoringPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -29,6 +48,7 @@ const ColoringPad = () => {
   const isEraserModeRef = useRef(false);
   const { imageUrls, selectedImageUrl } = useImage();
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [modalIsOpen] = useState(true);
 
   let navigate = useNavigate();  
   
@@ -109,6 +129,8 @@ const ColoringPad = () => {
   }, [color, isDrawing, penSize]);
 
   useEffect(() => {
+    if (!imageLoaded) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
   
@@ -164,11 +186,11 @@ const ColoringPad = () => {
       context.putImageData(nextState, 0, 0);
     } 
   };
+  
     
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-        <div style={{ width: '800px', display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', width: '800px',  gap: '10px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc'}}>
             <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="15" /> : <FaEraser size="15" />}</button>
             <input
               type="range"
@@ -183,7 +205,6 @@ const ColoringPad = () => {
             <button onClick={handleRedo} style={{ margin: '1px' }}><RedoIcon /></button>
             <button onClick={goToCompletePad} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>완성</button>
             
-            {/* 색상 선택기 컨테이너 */}
             <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap' }}>
               {predefinedColors.map((predefinedColor) => (
                 <button
@@ -201,21 +222,40 @@ const ColoringPad = () => {
                 />
               ))}
             </div>
-          </div>
         </div>
         {!imageLoaded && (
-          <canvas
-            ref={canvasRef}
-            width={800}
-            height={600}
-            style={{ backgroundColor: 'white' }}
-          />
+          <>
+            <canvas
+              ref={canvasRef}
+              width={800}
+              height={600}
+              style={{ backgroundColor: 'white' }}
+            />
+            <div>
+              <Modal
+                isOpen={modalIsOpen}
+                contentLabel="로딩 중"
+                style={{
+                  content: {
+                    top: '50%',
+                    left: '50%',
+                    right: 'auto',
+                    bottom: 'auto',
+                    marginRight: '-50%',
+                    transform: 'translate(-50%, -50%)',
+                    textAlign: 'center',
+                    border: 'none',
+                  },
+                }}
+              >
+              <img src="/assets/loadingimage.jpg" alt="Loading..." style={{ borderRadius: '10px' }} />
+              <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif'  }}>이미지를 그리고 있어요~</p>
+              <RandomMessage/>
+              </Modal>
+            </div>
+          </>
         )}
-        <div>
-          <p>이미지 로드 상태: {imageLoaded ? '완료' : '로딩 중...'}</p>
-          <p>그리기 상태: {isDrawing ? '그리는 중' : '대기 중'}</p>
-        </div>
-      
+
         {selectedImageUrl && (
           <img
             src={selectedImageUrl}
