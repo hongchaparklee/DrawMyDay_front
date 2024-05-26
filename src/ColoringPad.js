@@ -1,6 +1,6 @@
 //ColoringPad.js
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom'; 
@@ -55,7 +55,7 @@ const ColoringPad = () => {
   const isEraserModeRef = useRef(false);
   const { imageUrls, selectedImageUrl } = useImage();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [modalIsOpen] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(true);
 
   let navigate = useNavigate();  
   
@@ -69,6 +69,36 @@ const ColoringPad = () => {
       navigate('/complete', { state: { imageDataUrl } });
     }
   }
+
+  const loadImageFromStream = (stream) => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        setImageLoaded(true);
+        setModalIsOpen(false);
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(stream);
+  };
+
+  const fetchImageFromServer = useCallback(() => {
+    setModalIsOpen(true);
+    setTimeout(() => {
+      const blob = new Blob([], {type : 'image/png'});
+      loadImageFromStream(blob);
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
+    fetchImageFromServer();
+  }, [fetchImageFromServer]);
 
   const handleSelectImage = (url) => {
     const canvas = canvasRef.current;
@@ -230,38 +260,34 @@ const ColoringPad = () => {
               ))}
             </div>
         </div>
-        {!imageLoaded && (
-          <>
-            <canvas
-              ref={canvasRef}
-              width={800}
-              height={600}
-              style={{ backgroundColor: 'white' }}
-            />
-            <div>
-              <Modal
-                isOpen={modalIsOpen}
-                contentLabel="로딩 중"
-                style={{
-                  content: {
-                    top: '50%',
-                    left: '50%',
-                    right: 'auto',
-                    bottom: 'auto',
-                    marginRight: '-50%',
-                    transform: 'translate(-50%, -50%)',
-                    textAlign: 'center',
-                    border: 'none',
-                  },
-                }}
-              >
-              <img src="/assets/loadingimage.jpg" alt="Loading..." style={{ borderRadius: '10px' }} />
-              <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif'  }}>이미지를 그리고 있어요~</p>
-              <RandomMessage/>
-              </Modal>
-            </div>
-          </>
-        )}
+        <div>
+          <canvas
+            ref={canvasRef}
+            width={800}
+            height={600}
+            style={{ backgroundColor: 'white' }}
+          />
+          <Modal
+            isOpen={modalIsOpen}
+            contentLabel="로딩 중"
+            style={{
+              content: {
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                textAlign: 'center',
+                border: 'none',
+              },
+            }}
+          >
+          <img src="/assets/loadingimage.jpg" alt="Loading..." style={{ borderRadius: '10px' }} />
+          <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif'  }}>이미지를 그리고 있어요~</p>
+          <RandomMessage/>
+          </Modal>
+        </div>
 
         {selectedImageUrl && (
           <img
