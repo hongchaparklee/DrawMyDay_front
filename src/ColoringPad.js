@@ -22,7 +22,14 @@ const predefinedColors = [
 const messages = [
   'Tip : 일기를 쓸 때는 솔직하게 적어봐요',
   'Tip : 횡단보도를 건널 때는 손을 들고 건너요',
-  'Tip : 엄마 말을 잘 들으면 좋은 일이 생길지도?'];
+  'Tip : 엄마 말을 잘 들으면 좋은 일이 생길지도?',
+  'Tip : 비가 올 때는 우산을 써요',
+  'TMI) 인간에게 가장 가까운 동물은 침팬지가 아니라 고릴라다',
+  'Quiz : 코끼리는 점프를 할 수 있을까?',
+  'TMI) 새우의 심장은 머리에 있다',
+  'Tip : 나갔다 들어오면 꼭! 손을 씻어요',
+  'Tip : 자기 전에 화장실을 갔다가 잠을 자요',
+  ];
 
 const RandomMessage = () => {
   const [message, setMessage] = useState('');
