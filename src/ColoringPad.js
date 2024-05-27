@@ -83,7 +83,7 @@ const ColoringPad = () => {
     img.src = `data:image/png;base64,${image}`;
     img.onload = () => {
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
-      setModalIsOpen(false); // 이미지가 로드되면 모달을 닫습니다.
+      setModalIsOpen(false);
     };
   }, [image]);
 
@@ -93,7 +93,8 @@ const ColoringPad = () => {
     if (!canvas) return;
 
     const context = canvas.getContext('2d');
-    context.strokeStyle = color;
+    const alpha = 0.01;
+    const rgbaColor = `rgba(${parseInt(color.slice(1, 3), 16)}, ${parseInt(color.slice(3, 5), 16)}, ${parseInt(color.slice(5, 7), 16)}, ${alpha})`; 
 
     const handleCanvasTouchStart = (e) => {
       setIsDrawing(true);
@@ -101,14 +102,13 @@ const ColoringPad = () => {
       const x = e.touches[0].clientX - rect.left;
       const y = e.touches[0].clientY - rect.top;
     
-      context.strokeStyle = isEraserModeRef.current ? canvas.style.backgroundColor : color;
-      context.lineWidth = penSize;
+      context.strokeStyle = isEraserModeRef.current ? canvas.style.backgroundColor : rgbaColor;
+      context.lineWidth = penSize * 2.5;
       context.beginPath();
       context.moveTo(x, y);
       
       pathRef.current = [{ x, y }];
     };
-  
   
     const handleCanvasTouchMove = (e) => {
       if (!isDrawing) return;
@@ -138,7 +138,7 @@ const ColoringPad = () => {
       canvas.removeEventListener('touchend', handleCanvasTouchEnd);
     };
   
-  }, [color, isDrawing, penSize]);
+}, [color, isDrawing, penSize]);
 
   useEffect(() => {
     if (!imageLoaded) return;
@@ -237,29 +237,27 @@ const ColoringPad = () => {
         </div>
         <div>
         <canvas ref={canvasRef} width={800} height={600} />
-
-          <Modal
-            isOpen={modalIsOpen}
-            contentLabel="로딩 중"
-            style={{
-              content: {
-                top: '50%',
-                left: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                marginRight: '-50%',
-                transform: 'translate(-50%, -50%)',
-                textAlign: 'center',
-                border: 'none',
-              },
-            }}
-          >
-          <img src="/assets/loadingimage.jpg" alt="Loading..." style={{ borderRadius: '10px' }} />
-          <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif'  }}>이미지를 그리고 있어요~</p>
-          <RandomMessage/>
-          </Modal>
-        </div>
-
+        <Modal
+          isOpen={modalIsOpen}
+          contentLabel="로딩 중"
+          style={{
+            content: {
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '-50%',
+              transform: 'translate(-50%, -50%)',
+              textAlign: 'center',
+              border: 'none',
+            },
+          }}
+        >
+        <img src="/assets/loadingimage.jpg" alt="Loading..." style={{ borderRadius: '10px' }} />
+        <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif'  }}>이미지를 그리고 있어요~</p>
+        <RandomMessage/>
+        </Modal>
+      </div>
     </div>
   );
 };

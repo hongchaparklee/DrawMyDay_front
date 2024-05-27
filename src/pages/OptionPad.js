@@ -35,7 +35,6 @@ const UserInfoForm = () => {
     });
   
     console.log(dataToSend);
-    // 로컬 저장소에 userInfo 저장
     localStorage.setItem('userInfo', dataToSend);
 
     alert("저장된건가?");

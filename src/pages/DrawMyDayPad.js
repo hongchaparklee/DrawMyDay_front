@@ -30,7 +30,7 @@ const DrawMyDayPad = () => {
     if (canvas) {
       const ctx = canvas.getContext('2d');
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data; // 픽셀 데이터 배열
+      const data = imageData.data;
   
       // 모든 픽셀에 대해 색상 반전 처리
       for (let i = 0; i < data.length; i += 4) {
@@ -63,8 +63,6 @@ const DrawMyDayPad = () => {
         })
         .then(response => {
           console.log('이미지가 성공적으로 전송되었습니다.', response.data);
-          
-          // 서버 응답으로 받은 base64 데이터를 navigate로 전달
           const base64Image = response.data.image;
           goToColoringPad(base64Image);
         })
@@ -169,7 +167,6 @@ const DrawMyDayPad = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     pathRef.current = [];
     
-    // 배경 이미지를 다시 그림
     const image = new Image();
     image.onload = function() {
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -181,24 +178,24 @@ const DrawMyDayPad = () => {
   const handleUndo = () => { //뒤로가기 버튼
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    if (stateStack.length > 1) { // 첫 번째 상태를 제외하고 실행
+    if (stateStack.length > 1) { 
       const currentState = context.getImageData(0, 0, canvas.width, canvas.height);
-      setRedoStack((prev) => [currentState, ...prev]); // 현재 상태를 redoStack에 추가
+      setRedoStack((prev) => [currentState, ...prev]);
       
-      const lastState = stateStack[stateStack.length - 2]; // 마지막에서 두 번째 상태를 복원
-      context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스를 클리어
+      const lastState = stateStack[stateStack.length - 2]; 
+      context.clearRect(0, 0, canvas.width, canvas.height); 
       context.putImageData(lastState, 0, 0);
       const newStack = stateStack.slice(0, stateStack.length - 1);
       setStateStack(newStack);
     }
   };
     
-  const handleRedo = () => {  //앞으로가기버튼
+  const handleRedo = () => { 
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     if (redoStack.length > 0) {
       const nextState = redoStack[0];
-      context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스를 클리어
+      context.clearRect(0, 0, canvas.width, canvas.height);
       context.putImageData(nextState, 0, 0);
       const newStack = redoStack.slice(1);
       setRedoStack(newStack);
@@ -209,8 +206,8 @@ const DrawMyDayPad = () => {
   const saveImageToState = () => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const imageDataUrl = canvas.toDataURL('image/png'); // 이미지 데이터를 URL로 변환
-      setSavedImage(imageDataUrl); // 상태 변수에 저장
+      const imageDataUrl = canvas.toDataURL('image/png');
+      setSavedImage(imageDataUrl);
       console.log('이미지 저장됨');
     }
   };
@@ -238,7 +235,7 @@ const DrawMyDayPad = () => {
         <button onClick={saveAndSendCanvas} style={{ margin: '5px' }}>확인</button>
         <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
         <button onClick={handleSaveSendAndGo} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif'}}>확인 및 다음</button>
-        <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> {/* 이미지 저장 함수 호출 */}
+        <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> 
       </div>
       <canvas
         ref={canvasRef}

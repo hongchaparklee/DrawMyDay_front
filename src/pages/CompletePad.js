@@ -65,9 +65,9 @@ const CompletePad = () => {
                 // JSON인지 Blob인지 판별
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
-                    return response.json(); // JSON 응답 처리
+                    return response.json();
                 } else {
-                    return response.blob(); // Blob 응답 처리
+                    return response.blob(); 
                 }
             })
             .then((data) => {
