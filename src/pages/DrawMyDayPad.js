@@ -216,13 +216,16 @@ const DrawMyDayPad = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
       <div style={{ width: '800px', display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', marginBottom: '20px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc'}}>
-        <button onClick={toggleEraserMode} style={{ margin: '5px' }}>
+        <style>
+          {`.btn { margin: 5px; } .btn-save { margin-left: 150px; }`}
+        </style>
+        <button className = "btn" onClick={toggleEraserMode}>
           {isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}
         </button>
-        <button onClick={handleClearAll} style={{ margin: '5px' }}><DeleteIcon /></button>
-        <button onClick={handleUndo} style={{ margin: '5px' }}><UndoIcon /></button>
-        <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
-        <button onClick={handleSaveSendAndGo} style={{ margin: '5px', marginLeft: '100px', fontFamily: 'KCCMurukmuruk, sans-serif'}}>다 썼어요!</button>
+        <button className = "btn" onClick={handleClearAll}><DeleteIcon /></button>
+        <button className = "btn" onClick={handleUndo}><UndoIcon /></button>
+        <button className = "btn" onClick={handleRedo}><RedoIcon /></button>
+        <button className = {'btn btn-save'} style = {{fontFamily : 'KCCMurukmuruk, sans-serif'}} onClick={handleSaveSendAndGo}>다 썼어요!</button>
       </div>
       <canvas
         ref={canvasRef}
