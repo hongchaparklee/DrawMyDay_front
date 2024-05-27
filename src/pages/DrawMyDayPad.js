@@ -18,7 +18,6 @@ const DrawMyDayPad = () => {
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
-  const [setSavedImage] = useState('');
   const navigate = useNavigate();
 
   const goToColoringPad = (base64Image) => {
@@ -203,15 +202,6 @@ const DrawMyDayPad = () => {
     }
   };
 
-  const saveImageToState = () => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const imageDataUrl = canvas.toDataURL('image/png');
-      setSavedImage(imageDataUrl);
-      console.log('이미지 저장됨');
-    }
-  };
-
   async function handleSaveSendAndGo() {
     try {
       console.log('이미지 전송을 시작합니다.');
@@ -225,17 +215,14 @@ const DrawMyDayPad = () => {
   
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-      <div style = {{ width: '800px', display : 'flex', flexDirection : 'row', justifyContent : 'center', gap : '10px', marginBottom : '20px', padding : '10px', backgroundColor : '#AED9E0', borderRadius : '10px', border : '1px solid #ccc'}}>
+      <div style={{ width: '800px', display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', marginBottom: '20px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc'}}>
         <button onClick={toggleEraserMode} style={{ margin: '5px' }}>
           {isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}
         </button>
         <button onClick={handleClearAll} style={{ margin: '5px' }}><DeleteIcon /></button>
         <button onClick={handleUndo} style={{ margin: '5px' }}><UndoIcon /></button>
         <button onClick={handleRedo} style={{ margin: '5px' }}><RedoIcon /></button>
-        <button onClick={saveAndSendCanvas} style={{ margin: '5px' }}>확인</button>
-        <button onClick={goToColoringPad} style={{ margin: '5px' }}>다음</button>
-        <button onClick={handleSaveSendAndGo} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif'}}>확인 및 다음</button>
-        <button onClick={saveImageToState} style={{ margin: '5px' }}>이미지 저장</button> 
+        <button onClick={handleSaveSendAndGo} style={{ margin: '5px', marginLeft: '100px', fontFamily: 'KCCMurukmuruk, sans-serif'}}>다 썼어요!</button>
       </div>
       <canvas
         ref={canvasRef}

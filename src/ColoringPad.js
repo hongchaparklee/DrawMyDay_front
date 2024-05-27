@@ -23,12 +23,18 @@ const messages = [
   'Tip : 일기를 쓸 때는 솔직하게 적어봐요',
   'Tip : 횡단보도를 건널 때는 손을 들고 건너요',
   'Tip : 엄마 말을 잘 들으면 좋은 일이 생길지도?',
+  'Tip : 아빠에게 마사지를 해주면 좋은 일이 생길지도?',
   'Tip : 비가 올 때는 우산을 써요',
   'TMI) 인간에게 가장 가까운 동물은 침팬지가 아니라 고릴라다',
-  'Quiz : 코끼리는 점프를 할 수 있을까?',
+  'Quiz) 코끼리는 점프를 할 수 있을까?',
   'TMI) 새우의 심장은 머리에 있다',
   'Tip : 나갔다 들어오면 꼭! 손을 씻어요',
   'Tip : 자기 전에 화장실을 갔다가 잠을 자요',
+  'Tip : 모르는 사람이 까까 사준다고 해도 따라가지 말아요',
+  'Quiz) 어린왕자가 먼저 만나는 캐릭터는 누구인가요?',
+  'Tip : 양치랑 세수 할 때는 물을 끄고 해요',
+  'Tip : 야생의 동물들은 함부로 만지지 않아요',
+  'Tip : 기침이나 재채기를 할 떄는 손으로 입을 막아요',
   ];
 
 const RandomMessage = () => {
@@ -203,39 +209,39 @@ const ColoringPad = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', width: '800px',  gap: '10px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc'}}>
-            <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="15" /> : <FaEraser size="15" />}</button>
-            <input
-              type="range"
-              min="1"
-              max="20"
-              step="1"
-              value={penSize}
-              onChange={handlePenSizeChange}
-            />
-            <button onClick={handleClearAll} style={{ margin: '3px' }}><DeleteIcon /></button>
-            <button onClick={handleUndo} style={{ margin: '1px' }}><UndoIcon /></button>
-            <button onClick={handleRedo} style={{ margin: '1px' }}><RedoIcon /></button>
-            <button onClick={goToCompletePad} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>완성</button>
+        <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="15" /> : <FaEraser size="15" />}</button>
+        <input
+          type="range"
+          min="1"
+          max="20"
+          step="1"
+          value={penSize}
+          onChange={handlePenSizeChange}
+        />
+        <button onClick={handleClearAll} style={{ margin: '3px' }}><DeleteIcon /></button>
+        <button onClick={handleUndo} style={{ margin: '1px' }}><UndoIcon /></button>
+        <button onClick={handleRedo} style={{ margin: '1px' }}><RedoIcon /></button>
+        <button onClick={goToCompletePad} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>완성</button>
             
-            <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap' }}>
-              {predefinedColors.map((predefinedColor) => (
-                <button
-                  key={predefinedColor}
-                  style={{
-                    backgroundColor: color === predefinedColor ? 'transparent' : predefinedColor,
-                    width: 30, 
-                    height: 30, 
-                    margin: '1px', 
-                    border: color === predefinedColor ? `3px solid ${predefinedColor}` : '1px solid grey',
-                    borderRadius: '50%',
-                    boxSizing: 'border-box',
-                  }}
-                  onClick={() => handleColorClick(predefinedColor)}
-                />
-              ))}
-            </div>
+        <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap' }}>
+          {predefinedColors.map((predefinedColor) => (
+            <button
+              key={predefinedColor}
+              style={{
+                backgroundColor: color === predefinedColor ? 'transparent' : predefinedColor,
+                width: 30, 
+                height: 30, 
+                margin: '1px', 
+                border: color === predefinedColor ? `3px solid ${predefinedColor}` : '1px solid grey',
+                borderRadius: '50%',
+                boxSizing: 'border-box',
+              }}
+              onClick={() => handleColorClick(predefinedColor)}
+            />
+          ))}
         </div>
-        <div>
+      </div>
+      <div>
         <canvas ref={canvasRef} width={800} height={600} />
         <Modal
           isOpen={modalIsOpen}
