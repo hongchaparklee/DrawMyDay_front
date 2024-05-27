@@ -8,7 +8,6 @@ import RedoIcon from '@mui/icons-material/Redo';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import KakaoTalk_20240510_211849584 from '../assets/KakaoTalk_20240510_211849584.png';
 import axios from 'axios';
-import { useImage } from './ImageContext';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -20,12 +19,10 @@ const DrawMyDayPad = () => {
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
   const [setSavedImage] = useState('');
-  const { setSelectedImageUrl } = useImage(); 
+  const navigate = useNavigate();
 
-  let navigate = useNavigate();
-
-  const goToColoringPad = () => {
-    navigate('/coloring');
+  const goToColoringPad = (base64Image) => {
+    navigate('/coloring', { state: { image: base64Image } });
   }
  
   const invertColors = () => {
@@ -47,7 +44,7 @@ const DrawMyDayPad = () => {
 
   const saveAndSendCanvas = () => {
     invertColors(); 
-  
+
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.toBlob(blob => {
@@ -55,19 +52,21 @@ const DrawMyDayPad = () => {
         formData.append('file', blob, 'paper.png'); 
 
         const userInfo = localStorage.getItem('userInfo');
-          if (userInfo) {
-            formData.append('userInfo', userInfo);
-          }
-  
-          axios.post('http://3.17.80.177/upload', formData, {
-          headers : {
-            'Content-Type': 'multipart/form-data' 
+        if (userInfo) {
+          formData.append('userInfo', userInfo);
+        }
+
+        axios.post('http://3.17.80.177/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then(response => {
           console.log('이미지가 성공적으로 전송되었습니다.', response.data);
-          setSelectedImageUrl(response.data.image_urls); 
-          console.log('서버 응답:', response.data.image_urls);
+          
+          // 서버 응답으로 받은 base64 데이터를 navigate로 전달
+          const base64Image = response.data.image;
+          goToColoringPad(base64Image);
         })
         .catch((error) => {
           console.error('Error:', error);

@@ -1,13 +1,13 @@
 //ColoringPad.js
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom'; 
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
-import { useImage } from './pages/ImageContext';
 import Modal from 'react-modal';
+import { useLocation } from 'react-router-dom';
 
 const predefinedColors = [
   '#E6E6FA', '#99FF99', '#FFFF00', '#FFFFFF', '#FFE4E1',
@@ -49,13 +49,15 @@ const ColoringPad = () => {
   const [redoStack, setRedoStack] = useState([]);
   const [color, setColor] = useState('#000');
   const [penSize, setPenSize] = useState(5);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const [isDrawing, setIsDrawing] = useState(false); 
   const canvasRef = useRef(null);
+  const contextRef = useRef(null);
   const pathRef = useRef([]);
   const isEraserModeRef = useRef(false);
-  const { imageUrls, selectedImageUrl } = useImage();
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageLoaded] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(true);
+  const location = useLocation();
+  const { image } = location.state || {};
 
   let navigate = useNavigate();  
   
@@ -70,48 +72,21 @@ const ColoringPad = () => {
     }
   }
 
-  const loadImageFromStream = (stream) => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const img = new Image();
-      img.onload = () => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(img, 0, 0, canvas.width, canvas.height);
-        setImageLoaded(true);
-        setModalIsOpen(false);
-      };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(stream);
-  };
-
-  const fetchImageFromServer = useCallback(() => {
-    setModalIsOpen(true);
-    setTimeout(() => {
-      const blob = new Blob([], {type : 'image/png'});
-      loadImageFromStream(blob);
-    }, 3000);
-  }, []);
-
   useEffect(() => {
-    fetchImageFromServer();
-  }, [fetchImageFromServer]);
-
-  const handleSelectImage = (url) => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
+    contextRef.current = context;
+
     const img = new Image();
-    img.crossOrigin = 'Anonymous'; // CORS 문제를 방지하기 위해
+    img.src = `data:image/png;base64,${image}`;
     img.onload = () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
-      setImageLoaded(true); // 이미지 로드 완료 상태 업데이트
+      setModalIsOpen(false); // 이미지가 로드되면 모달을 닫습니다.
     };
-    img.src = url;
-  };
+  }, [image]);
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -261,12 +236,8 @@ const ColoringPad = () => {
             </div>
         </div>
         <div>
-          <canvas
-            ref={canvasRef}
-            width={800}
-            height={600}
-            style={{ backgroundColor: 'white' }}
-          />
+        <canvas ref={canvasRef} width={800} height={600} />
+
           <Modal
             isOpen={modalIsOpen}
             contentLabel="로딩 중"
@@ -289,33 +260,6 @@ const ColoringPad = () => {
           </Modal>
         </div>
 
-        {selectedImageUrl && (
-          <img
-            src={selectedImageUrl}
-            alt="Selected Drawing"
-            onLoad = {() => setImageLoaded(true)}
-            style={{
-              marginTop: '20px',
-              maxWidth: '800px',
-              maxHeight: '600px',
-              objectFit: 'contain',
-              display: imageLoaded ? 'block' : 'none' // 이미지 로딩 상태에 따라 표시 여부 결정
-            }}
-          />
-        )}
-  
-        <div>
-          {imageUrls.map((url, index) => (
-            <img
-              key={index}
-              src={`${url}?${new Date().getTime()}`}
-              alt={`Uploaded Drawing ${index + 1}`}
-              crossOrigin="anonymous"
-              onClick={() => handleSelectImage(url)}
-              style={{ cursor: 'pointer' }}
-            />
-          ))}
-        </div>
     </div>
   );
 };

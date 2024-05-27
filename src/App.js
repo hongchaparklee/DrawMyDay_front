@@ -8,12 +8,10 @@ import MemoryPage from './pages/MemoryPage';
 import CompletePage from './pages/CompletePage';
 import DrawMyDayPad from './pages/DrawMyDayPad';
 import OptionPad from './pages/OptionPad';
-import { ImageProvider } from './pages/ImageContext';
 
 function App() {
   return (
     <Router>
-      <ImageProvider>
         <Routes>
           <Route path="/option" element={<OptionPad />} />
           <Route path="/" element={<MainPage />} />
@@ -22,7 +20,6 @@ function App() {
           <Route path="/DrawMyDay" element={<DrawMyDayPad />} />
           <Route path="/complete" element={<CompletePage />} />
         </Routes>
-      </ImageProvider>
     </Router>
   );
 }
