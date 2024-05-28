@@ -13,7 +13,7 @@ const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const [color] = useState('#000');
-  const [penSize] = useState(2);
+  const [penSize] = useState(2.5);
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
