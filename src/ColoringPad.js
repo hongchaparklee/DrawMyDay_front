@@ -41,8 +41,20 @@ const RandomMessage = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    setMessage(messages[randomIndex]);
+    // 메시지를 변경하는 곳
+    const changeMessage = () => {
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      setMessage(messages[randomIndex]);
+    };
+
+    // 컴포넌트 마운트 시 초기 메시지 설정
+    changeMessage();
+
+    // 대충 4~5초
+    const intervalId = setInterval(changeMessage, 4000 + Math.random() * 1000);
+
+    // 컴포넌트 언마운트 시 인터벌 정리
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
