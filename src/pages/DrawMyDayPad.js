@@ -2,12 +2,9 @@
 
 import React, { useState, useRef, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import DeleteIcon from '@mui/icons-material/Delete';
-import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
-import { FaPencilAlt, FaEraser } from 'react-icons/fa';
 import KakaoTalk_20240510_211849584 from '../assets/KakaoTalk_20240510_211849584.png';
 import axios from 'axios';
+import saveSendIcon from '../assets/DMD-05.png';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -17,8 +14,12 @@ const DrawMyDayPad = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
-  const isEraserModeRef = useRef(false);
+  const [isEraserMode, setIsEraserMode] = useState(false);
   const navigate = useNavigate();
+  const isEraserModeRef = useRef(isEraserMode);
+  const [isClearAllActive, setIsClearAllActive] = useState(false);
+  const [isUndoActive, setIsUndoActive] = useState(false);
+  const [isRedoActive, setIsRedoActive] = useState(false);
 
   const goToColoringPad = (base64Image) => {
     navigate('/coloring', { state: { image: base64Image } });
@@ -144,20 +145,22 @@ const DrawMyDayPad = () => {
     };
   }, [color, isDrawing, penSize]);
     
-  const toggleEraserMode = () => {
+  const activatePenMode = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-      
-    if (isEraserModeRef.current) {
-      // 지우개 모드 해제: 그림그리게 함
-      context.globalCompositeOperation = 'source-over';
-    } else
-      {
-        // 지우개 모드 활성화: 지우개모드로
-        context.globalCompositeOperation = 'destination-out';
-        context.lineWidth = 10; // 지우개 크기
-      }
-    isEraserModeRef.current = !isEraserModeRef.current; 
+    context.globalCompositeOperation = 'source-over'; // 그림 그리기 모드
+    context.lineWidth = penSize; // 펜 크기
+    isEraserModeRef.current = false;
+    setIsEraserMode(false);
+  };
+
+  const activateEraserMode = () => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    context.globalCompositeOperation = 'destination-out'; // 지우개 모드
+    context.lineWidth = 10; // 지우개 크기
+    isEraserModeRef.current = true;
+    setIsEraserMode(true);
   };
     
   const handleClearAll = () => {
@@ -165,6 +168,8 @@ const DrawMyDayPad = () => {
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     pathRef.current = [];
+    setIsClearAllActive(true);
+    setTimeout(() => setIsClearAllActive(false), 200);
     
     const image = new Image();
     image.onload = function() {
@@ -177,6 +182,8 @@ const DrawMyDayPad = () => {
   const handleUndo = () => { //뒤로가기 버튼
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    setIsUndoActive(true);
+    setTimeout(() => setIsUndoActive(false), 200);
     if (stateStack.length > 1) { 
       const currentState = context.getImageData(0, 0, canvas.width, canvas.height);
       setRedoStack((prev) => [currentState, ...prev]);
@@ -192,6 +199,9 @@ const DrawMyDayPad = () => {
   const handleRedo = () => { 
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    setIsRedoActive(true);
+    setTimeout(() => setIsRedoActive(false), 200);
+
     if (redoStack.length > 0) {
       const nextState = redoStack[0];
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -214,18 +224,90 @@ const DrawMyDayPad = () => {
   }
   
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-      <div style={{ width: '800px', display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', marginBottom: '20px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc'}}>
-        <style>
-          {`.btn { margin: 5px; } .btn-save { margin-left: 150px; }`}
-        </style>
-        <button className = "btn" onClick={toggleEraserMode}>
-          {isEraserModeRef.current ? <FaPencilAlt size="18" /> : <FaEraser size="18" />}
-        </button>
-        <button className = "btn" onClick={handleClearAll}><DeleteIcon /></button>
-        <button className = "btn" onClick={handleUndo}><UndoIcon /></button>
-        <button className = "btn" onClick={handleRedo}><RedoIcon /></button>
-        <button className = {'btn btn-save'} style = {{fontFamily : 'KCCMurukmuruk, sans-serif'}} onClick={handleSaveSendAndGo}>다 썼어요!</button>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      <div style={{ width: '420px', display: 'flex', justifyContent: 'space-between', marginBottom: '20px', padding: '10px', backgroundColor: 'white', borderRadius: '10px', border: '1px solid #ccc' }}>
+        {/* 첫 번째 버튼 그룹 */}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '30px', marginLeft: '50px' }}>
+          <button
+            className={`btn ${!isEraserMode ? 'btn-selected' : ''}`}
+            onClick={activatePenMode}
+            style={{
+              backgroundImage: `url(/assets/DMD-10.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: !isEraserMode ? 1 : 0.5,
+            }}
+          ></button>
+          <button
+            className={`btn ${isEraserMode ? 'btn-selected' : ''}`}
+            onClick={activateEraserMode}
+            style={{
+              backgroundImage: `url(/assets/DMD-08.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: isEraserMode ? 1 : 0.5,
+            }}
+          ></button>
+          <button
+            className="btn"
+            onClick={handleClearAll}
+            style={{
+              backgroundImage: `url(/assets/DMD-11.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: isClearAllActive ? 1 : 0.5,
+            }}
+          ></button>
+        </div>
+        {/* 두 번째 버튼 그룹 */}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '30px', marginRight: '50px' }}>
+          <button
+            className="btn"
+            onClick={handleUndo}
+            style={{
+              backgroundImage: `url(/assets/DMD-09.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: isUndoActive ? 1 : 0.5,
+            }}
+          ></button>
+          <button
+            className="btn"
+            onClick={handleRedo}
+            style={{
+              backgroundImage: `url(/assets/DMD-12.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: isRedoActive ? 1 : 0.5,
+            }}
+          ></button>
+        </div>
+      </div>
+      <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <img
+          src={saveSendIcon}
+          alt="Save and Send"
+          style={{ 
+            cursor: 'pointer', 
+            position: 'absolute', 
+            right: '0', // 오른쪽 끝에 위치
+            top: '50%', // Y축 중앙에 위치
+            transform: 'translateY(140%)', // Y축 중앙으로 조정
+            width: '50px', // 이미지의 너비 조정
+            height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
+          }}
+          onClick={handleSaveSendAndGo}
+        />
       </div>
       <canvas
         ref={canvasRef}
@@ -237,7 +319,7 @@ const DrawMyDayPad = () => {
         }}
       />
     </div>
-  );
+  );   
 };
 
 export default DrawMyDayPad;

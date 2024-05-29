@@ -12,18 +12,18 @@ import rocketImage from 'C:/Users/jinhy/OneDrive/Taro/DrawMyDay_front/src/assets
 const LinkItem = ({ to, children, icon: Icon, image, imageSize = '24px', fontSize = '16px' }) => {
   return (
     <Link to={to} className="link-item" style={{
-      display: 'flex', // Flexbox 사용
-      flexDirection: 'column', // 자식 요소를 세로로 정렬
+      display: 'flex', 
+      flexDirection: 'column',
       alignItems: 'center', // 가로축 중앙 정렬
-      justifyContent: 'center', // 세로축 중앙 정렬
-      textDecoration: 'none', // 링크 밑줄 제거
+      justifyContent: 'center',
+      textDecoration: 'none',
     }}>
       {image ? (
-        <img src={image} alt="Link Icon" style={{ width: imageSize, height: imageSize, marginBottom: '3px' }} />
+        <img src={image} alt="Link Icon" style={{ width: imageSize, height: imageSize, marginBottom: '5px' }} />
       ) : (
         <Icon className="icon-style" style={{ color: '#004265', marginBottom: '8px' }} />
       )}
-      <span style={{ fontFamily: 'UhBeeSeHyunBold', textAlign: 'center', display: 'block', fontSize, color: '#004265' }}>{children}</span>
+      <span style={{ fontFamily: 'UhBeeSeHyun', textAlign: 'center', display: 'block', fontSize, color: '#004265' }}>{children}</span>
     </Link>
   );
 };
@@ -42,23 +42,23 @@ const MainPage = () => {
     alignItems: 'center',
     justifyContent: 'center',
     width: '44%', // 박스의 너비
-    height: '150px', // 박스의 높이
+    height: '160px', // 박스의 높이
     backgroundColor: 'rgba(255, 255, 255, 0.4)', // 박스의 배경색 및 투명도
     marginTop: '15px', // 박스의 상단 여백
     marginBottom: '30px', // 박스의 하단 여백 추가
-    borderRadius: '10px', // 박스의 모서리 둥글기
+    borderRadius: '10px', // 모서리 둥굴기
     textAlign : 'center',
-    fontFamily: 'PretendardVariable',
+    fontFamily: 'Pretendard-Medium',
     color: '#004265',
     position : 'relative',
     overflow : 'visible',
   };
 
   const imageStyle = {
-    position: 'absolute', // 추가: 절대 위치 설정
+    position: 'absolute', 
     bottom: '-40px', // 아래쪽으로부터 10px
     left: '-60px', // 왼쪽으로부터 10px
-    width: '72px', // 이미지 너비
+    width: '73px', // 이미지 너비
     height: '60px', // 이미지 높이
   };
 
