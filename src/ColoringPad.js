@@ -103,11 +103,15 @@ const ColoringPad = () => {
       context.drawImage(localImg, 0, 0, canvas.width, canvas.height);
 
       if (image) {
-        // 서버에서 받아온 이미지를 로드하고 그리기
         const serverImg = new Image();
         serverImg.src = `data:image/png;base64,${image}`;
         serverImg.onload = () => {
-          context.drawImage(serverImg, 0, 0, canvas.width, canvas.height);
+          const imgWidth = canvas.width * 0.9;
+          const imgHeight = canvas.height * 0.9;
+          const imgX = (canvas.width - imgWidth) / 2;
+          const imgY = (canvas.height - imgHeight) / 2;
+  
+          context.drawImage(serverImg, imgX, imgY, imgWidth, imgHeight);
           setModalIsOpen(false);
         };
       }
