@@ -11,17 +11,22 @@ import rocketImage from 'C:/Users/jinhy/OneDrive/Taro/DrawMyDay_front/src/assets
 
 const LinkItem = ({ to, children, icon: Icon, image, imageSize = '24px', fontSize = '16px' }) => {
   return (
-    <Link to={to} className="link-item">
+    <Link to={to} className="link-item" style={{
+      display: 'flex', // Flexbox 사용
+      flexDirection: 'column', // 자식 요소를 세로로 정렬
+      alignItems: 'center', // 가로축 중앙 정렬
+      justifyContent: 'center', // 세로축 중앙 정렬
+      textDecoration: 'none', // 링크 밑줄 제거
+    }}>
       {image ? (
-        <img src={image} alt="Link Icon" style={{ width: imageSize, height: imageSize, marginRight: '8px' }} />
+        <img src={image} alt="Link Icon" style={{ width: imageSize, height: imageSize, marginBottom: '3px' }} />
       ) : (
-        <Icon className="icon-style" style={{ color: '#004265' }} />
+        <Icon className="icon-style" style={{ color: '#004265', marginBottom: '8px' }} />
       )}
-      <span style={{ fontFamily: 'UhBeeSeHyun', textAlign: 'center', display: 'block', fontSize, color: '#004265' }}>{children}</span>
+      <span style={{ fontFamily: 'UhBeeSeHyunBold', textAlign: 'center', display: 'block', fontSize, color: '#004265' }}>{children}</span>
     </Link>
   );
 };
-
 
 const MainPage = () => {
   const containerStyle = {
@@ -38,12 +43,12 @@ const MainPage = () => {
     justifyContent: 'center',
     width: '44%', // 박스의 너비
     height: '150px', // 박스의 높이
-    backgroundColor: 'white', // 박스의 배경색
-    marginTop: '10px', // 박스의 상단 여백
+    backgroundColor: 'rgba(255, 255, 255, 0.4)', // 박스의 배경색 및 투명도
+    marginTop: '15px', // 박스의 상단 여백
     marginBottom: '30px', // 박스의 하단 여백 추가
     borderRadius: '10px', // 박스의 모서리 둥글기
     textAlign : 'center',
-    fontFamily: 'UhBeeSeHyunBold',
+    fontFamily: 'PretendardVariable',
     color: '#004265',
     position : 'relative',
     overflow : 'visible',
@@ -53,8 +58,8 @@ const MainPage = () => {
     position: 'absolute', // 추가: 절대 위치 설정
     bottom: '-40px', // 아래쪽으로부터 10px
     left: '-60px', // 왼쪽으로부터 10px
-    width: '75px', // 이미지 너비
-    height: '75px', // 이미지 높이
+    width: '72px', // 이미지 너비
+    height: '60px', // 이미지 높이
   };
 
   return (
@@ -69,9 +74,9 @@ const MainPage = () => {
         it's perfect for visually capturing daily experiences.<br/>
       </div>
       <div className="link-container">
-        <LinkItem to="/DrawMyDay" image={drawImage} imageSize="52px" fontSize="14px">일기 쓰기</LinkItem>
-        <LinkItem to="/option" image={userImage} imageSize="52px" fontSize="14px">내 정보</LinkItem>
-        <LinkItem to="/Memory" image={memoryImage} imageSize="52px" fontSize="14px">추억</LinkItem>
+        <LinkItem to="/DrawMyDay" image={drawImage} imageSize="52px" fontSize="13px">일기 쓰기</LinkItem>
+        <LinkItem to="/option" image={userImage} imageSize="52px" fontSize="13px">내 정보</LinkItem>
+        <LinkItem to="/Memory" image={memoryImage} imageSize="52px" fontSize="13px">추억</LinkItem>
       </div>
     </div>
   );

@@ -22,8 +22,15 @@
 }
 
 @font-face {
-  font-family: 'UhBeeSeHyun';
+  font-family: 'UhBeeSeHyunBold';
   src: url('./fonts/UhBeeSehyunBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PretendardVariable';
+  src: url('./fonts/PretendardVariable.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
