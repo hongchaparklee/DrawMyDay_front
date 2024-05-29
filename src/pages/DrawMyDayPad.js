@@ -238,6 +238,7 @@ const DrawMyDayPad = () => {
               height: '30px',
               backgroundColor: 'transparent',
               opacity: !isEraserMode ? 1 : 0.5,
+              border: 'none'
             }}
           ></button>
           <button
@@ -250,6 +251,7 @@ const DrawMyDayPad = () => {
               height: '30px',
               backgroundColor: 'transparent',
               opacity: isEraserMode ? 1 : 0.5,
+              border: 'none'
             }}
           ></button>
           <button
@@ -262,6 +264,7 @@ const DrawMyDayPad = () => {
               height: '30px',
               backgroundColor: 'transparent',
               opacity: isClearAllActive ? 1 : 0.5,
+              border: 'none'
             }}
           ></button>
         </div>
@@ -277,6 +280,7 @@ const DrawMyDayPad = () => {
               height: '30px',
               backgroundColor: 'transparent',
               opacity: isUndoActive ? 1 : 0.5,
+              border: 'none'
             }}
           ></button>
           <button
@@ -289,6 +293,7 @@ const DrawMyDayPad = () => {
               height: '30px',
               backgroundColor: 'transparent',
               opacity: isRedoActive ? 1 : 0.5,
+              border: 'none'
             }}
           ></button>
         </div>
