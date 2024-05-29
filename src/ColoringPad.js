@@ -97,11 +97,20 @@ const ColoringPad = () => {
     context.lineJoin = 'round';
     contextRef.current = context;
 
-    const img = new Image();
-    img.src = `data:image/png;base64,${image}`;
-    img.onload = () => {
-      context.drawImage(img, 0, 0, canvas.width, canvas.height);
-      setModalIsOpen(false);
+    const localImg = new Image();
+    localImg.src = '/assets/sketch.png';
+    localImg.onload = () => {
+      context.drawImage(localImg, 0, 0, canvas.width, canvas.height);
+
+      if (image) {
+        // 서버에서 받아온 이미지를 로드하고 그리기
+        const serverImg = new Image();
+        serverImg.src = `data:image/png;base64,${image}`;
+        serverImg.onload = () => {
+          context.drawImage(serverImg, 0, 0, canvas.width, canvas.height);
+          setModalIsOpen(false);
+        };
+      }
     };
   }, [image]);
 
