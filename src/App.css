@@ -14,6 +14,20 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'UhBeeSeHyun';
+  src: url('./fonts/UhBeeSehyun.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UhBeeSeHyun';
+  src: url('./fonts/UhBeeSehyunBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .my-page {
   font-family: 'KCCMurukmuruk', sans-serif;
 } 
@@ -21,7 +35,7 @@
 html, body {
   height: 100%;
   margin: 0;
-  background-color: #F8F5EA;
+  background-color: #FEEFE1;
 }
 
 @media (prefers-reduced-motion: no-preference) {
