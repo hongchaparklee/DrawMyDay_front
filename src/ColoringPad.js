@@ -48,14 +48,10 @@ const RandomMessage = () => {
       const randomIndex = Math.floor(Math.random() * messages.length);
       setMessage(messages[randomIndex]);
     };
-
-    // 컴포넌트 마운트 시 초기 메시지 설정
     changeMessage();
-
     // 대충 4~5초
     const intervalId = setInterval(changeMessage, 4000 + Math.random() * 1000);
 
-    // 컴포넌트 언마운트 시 인터벌 정리
     return () => clearInterval(intervalId);
   }, []);
 
@@ -184,10 +180,8 @@ const ColoringPad = () => {
 }, [color, isDrawing, penSize]);
 
 const handlePen = () => {
-  // 이레이저 모드가 활성화되어 있다면, 이를 비활성화하고 펜 모드로 전환합니다.
   isEraserModeRef.current = false;
-  // 펜 사이즈를 사용자가 마지막으로 설정한 값(또는 기본값)으로 설정합니다.
-  setPenSize(5); // 여기서 5는 예시 값입니다. 실제로는 사용자가 설정한 펜 사이즈를 사용해야 합니다.
+  setPenSize(5); 
 };
 
   useEffect(() => {
@@ -283,38 +277,37 @@ const handlePen = () => {
               opacity: isClearAllActive ? 1 : 0.5,
               border: 'none',
               margin: '3px', 
-            }}>
-            
+            }}> 
           </button>
         </div>
         {/* 두 번째 버튼 그룹 */}
         <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', marginLeft: '60px', marginRight: '60px' }}>
-        <button 
-          onClick={handleUndo} 
-          style={{ 
-            backgroundImage: `url(/assets/bt_back_on.png)`,
-            backgroundSize: 'cover',
-            width: '30px',
-            height: '30px',
-            backgroundColor: 'transparent',
-            opacity: isUndoActive ? 1 : 0.5,
-            border : 'none',
-            margin: '3px', 
+          <button 
+            onClick={handleUndo} 
+            style={{ 
+              backgroundImage: `url(/assets/bt_back_on.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: isUndoActive ? 1 : 0.5,
+              border : 'none',
+              margin: '3px', 
             }}>
-            </button>
-        <button 
-          onClick={handleRedo} 
-          style={{
-            backgroundImage: `url(/assets/bt_fw_on.png)`,
-            backgroundSize: 'cover',
-            width: '30px',
-            height: '30px',
-            backgroundColor: 'transparent',
-            opacity: isRedoActive ? 1 : 0.5,
-            border: 'none',
-            margin: '3px', 
-          }}>
-        </button>
+          </button>
+          <button 
+            onClick={handleRedo} 
+            style={{
+              backgroundImage: `url(/assets/bt_fw_on.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: isRedoActive ? 1 : 0.5,
+              border: 'none',
+              margin: '3px', 
+            }}>
+          </button>
         </div>
         <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap', maxWidth: '400px', marginLeft: '15px', marginRight: '1px', scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
           {predefinedColors.map((predefinedColor) => (
@@ -336,20 +329,20 @@ const handlePen = () => {
         </div>
       </div>
       <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-      <img
-        src={previousIcon}
-        alt="Go to Draw My Day Page"
-        style={{ 
-          cursor: 'pointer', 
-          position: 'absolute', 
-          left: '0', // 왼쪽 끝에 위치
-          top: '50%', // Y축 중앙에 위치
-          transform: 'translateY(140%)', // Y축 중앙으로 조정
-          width: '50px', // 이미지의 너비 조정
-          height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
-        }}
-        onClick={goToDrawMyDayPage}
-      />
+        <img
+          src={previousIcon}
+          alt="Go to Draw My Day Page"
+          style={{ 
+            cursor: 'pointer', 
+            position: 'absolute', 
+            left: '0', // 왼쪽 끝에 위치
+            top: '50%', // Y축 중앙에 위치
+            transform: 'translateY(140%)', // Y축 중앙으로 조정
+            width: '50px', // 이미지의 너비 조정
+            height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
+          }}
+          onClick={goToDrawMyDayPage}
+        />
         <img
           src={nextIcon}
           alt="Go to Complete"

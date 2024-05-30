@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom'; 
-// import KakaoTalk_20240510_211849584 from '../assets/KakaoTalk_20240510_211849584.png';
+// import KakaoTalkImage from '../assets/KakaoTalk_20240510_211849584.png';
 import axios from 'axios';
 import saveSendIcon from '../assets/DMD-05.png';
 import testImage from '../assets/test3.png';
@@ -163,7 +163,7 @@ const DrawMyDayPad = () => {
   };
     
 
-  const handleUndo = () => { //뒤로가기 버튼
+  const handleUndo = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     setIsUndoActive(true);
@@ -275,11 +275,11 @@ const DrawMyDayPad = () => {
           style={{ 
             cursor: 'pointer', 
             position: 'absolute', 
-            right: '0', // 오른쪽 끝에 위치
-            top: '50%', // Y축 중앙에 위치
-            transform: 'translateY(140%)', // Y축 중앙으로 조정
-            width: '50px', // 이미지의 너비 조정
-            height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
+            right: '0', 
+            top: '50%', 
+            transform: 'translateY(140%)',
+            width: '50px', 
+            height: 'auto',
           }}
           onClick={handleSaveSendAndGo}
         />

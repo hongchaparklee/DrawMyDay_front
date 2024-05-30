@@ -14,7 +14,7 @@ const LinkItem = ({ to, children, icon: Icon, image, imageSize = '24px', fontSiz
     <Link to={to} className="link-item" style={{
       display: 'flex', 
       flexDirection: 'column',
-      alignItems: 'center', // 가로축 중앙 정렬
+      alignItems: 'center',
       justifyContent: 'center',
       textDecoration: 'none',
     }}>
