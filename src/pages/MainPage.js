@@ -67,11 +67,11 @@ const MainPage = () => {
       <img src={titleImage} alt="Title" style={{ width: '450px', height: 'auto', marginTop: '14px' }} />
       <div style={boxStyle}> 
         <img src={rocketImage} alt="Rocket Icon" style={imageStyle} />
-        "Draw MY DAY" combines journaling with drawing,<br/>
-        allowing users to express thoughts through sketches and photos.<br/>
+        Draw My Day로 오늘의 하루를 그려보아요!<br/>
+        일기를 쓰면 일기가 그림으로 변해요!<br/>
         <br/>
-        With privacy features and customization,<br/>
-        it's perfect for visually capturing daily experiences.<br/>
+        그림을 색칠하며 나만의 일기를 완성해요!<br/>
+        하루하루의 이야기를 재미있게 기록해 보세요<br/>
       </div>
       <div className="link-container">
         <LinkItem to="/DrawMyDay" image={drawImage} imageSize="52px" fontSize="13px">일기 쓰기</LinkItem>

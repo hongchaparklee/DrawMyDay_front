@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const saveButtonImage = `${process.env.PUBLIC_URL}/assets/saveBu.png`;
+
 const UserInfoForm = () => {
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -61,16 +63,6 @@ const UserInfoForm = () => {
     width: '300px',
   };
 
-  const buttonStyle = {
-    padding: '10px 20px',
-    cursor: 'pointer',
-    backgroundColor: '#007bff',
-    color: "white",
-    border: 'none',
-    borderRadius: '5px',
-    marginTop: '10px',
-  };
-
   return (
     <form onSubmit={handleSubmit} style={formStyle}>
       <div>
@@ -126,7 +118,17 @@ const UserInfoForm = () => {
           style={{ margin: '10px' }}
         />
       </div>
-      <button type="submit" style={{buttonStyle, fontFamily: 'KCCMurukmuruk, sans-serif'}}>저장해버리긔</button>
+      <img
+        src={saveButtonImage}
+        alt="저장 버튼"
+        style={{ 
+          cursor: 'pointer',
+          marginTop: '10px',
+          width : '80px',
+          height : 'auto',  
+        }}
+        onClick={handleSubmit} 
+      />
     </form>
   );
 };

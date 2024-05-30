@@ -1,4 +1,3 @@
-//MemoryPad.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,49 +22,70 @@ const MemoryPad = () => {
 
     const navigateToMainPage = () => navigate('/');
 
-    const buttonStyle = {
-        backgroundColor: '#FFC0CB',
-        color: 'white',
-        border: 'none',
-        padding: '10px 20px',
-        fontSize: '16px',
-        cursor: 'pointer',
-        borderRadius: '20px'
-    };
-
     const mainPageButtonStyle = {
-        ...buttonStyle,
-        margin: '10px auto',
-        display: 'block',
-        fontFamily: 'KCCMurukmuruk, sans-serif',
+        cursor: 'pointer',
+        position: 'absolute',
+        width : '42px',
+        height : '42px',
+        top: '0',
+        right: '400px',
+        margin: '10px',
     };
 
     const dateDisplayStyle = {
         position: 'absolute',
-        right: 0,
-        top: '-30px',
+        right: '10px',
+        bottom: '10px',
         fontFamily: 'KCCMurukmuruk',
-        fontSize: '20px',
-        backgroundColor: '#F8F5EA',
-        padding: '5px'
+        fontSize: '15px',
+        backgroundColor: 'transparent',
+        padding: '5px',
+        marginRight : '20px',
     };
 
+    const iconButtonStyle = {
+        cursor: 'pointer',
+        width: '3vw',
+        height: 'auto',
+        objectFit : 'contain',
+    };
+
+    const buttonStyle = {
+        border: 'none',
+        padding: '0',
+        background: 'transparent',
+    };
+    
     return (
-        <div style={{ textAlign: 'center', position: 'relative', marginTop: '20px' }}>
-            <h1 style={{ fontFamily: 'KCCMurukmuruk' }}>내 추억 보기</h1>
+        <div style={{ textAlign: 'center', position: 'relative', marginTop: '80px' }}>
+            <h1 style={{fontSize: '20px', fontFamily: 'KCCMurukmuruk', position: 'absolute', top: '0', left: '410px', margin: '10px' }}>내 추억 보기</h1>
+            <img 
+                src={`${process.env.PUBLIC_URL}/assets/home.png`} 
+                alt="메인 페이지로" 
+                style={mainPageButtonStyle} 
+                onClick={navigateToMainPage} 
+            />
             {memories.length > 0 && (
-                <div style={{ position: 'relative', display: 'inline-block' }}>
-                    <div style={dateDisplayStyle}>
-                        {memories[currentIndex].date}
-                    </div>
-                    <button onClick={handlePrev} style={{ ...buttonStyle, position: 'absolute', top: '50%', left: '-50px', transform: 'translateY(-50%)' }}>◁</button>
-                    <div>
+                <div style={{ position: 'relative', display: 'inline-block', marginTop: '60px' }}>
+                    <button onClick={handlePrev} style={{ ...buttonStyle, position: 'absolute', left: '-27px', top: '50%', transform: 'translateY(-50%)' }}>
+                        <img src={`${process.env.PUBLIC_URL}/assets/DMD-06.png`} alt="Previous" style={iconButtonStyle} />
+                    </button>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
                         {memories[currentIndex].images.map((image, index) => (
-                            <img key={index} src={image} alt={`memory-${index}`} style={{ width: '400px', height: '400px', margin: '0 10px' }}/>
+                            <img 
+                                key={index} 
+                                src={image} 
+                                alt={`memory-${index}`} 
+                                style={{ maxWidth: '400px', maxHeight: '400px', margin: '0 10px', position: 'relative' }}
+                            />
                         ))}
+                        <div style={dateDisplayStyle}>
+                            {memories[currentIndex].date}
+                        </div>
                     </div>
-                    <button onClick={handleNext} style={{ ...buttonStyle, position: 'absolute', top: '50%', right: '-50px', transform: 'translateY(-50%)' }}>▷</button>
-                    <button onClick={navigateToMainPage} style={mainPageButtonStyle}>메인 페이지로</button>
+                    <button onClick={handleNext} style={{ ...buttonStyle, position: 'absolute', right: '-25x', top: '50%', transform: 'translateY(-50%)' }}> {/* 변경사항 적용 */}
+                        <img src={`${process.env.PUBLIC_URL}/assets/DMD-05.png`} alt="Next" style={iconButtonStyle} />
+                    </button>
                 </div>
             )}
         </div>

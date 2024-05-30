@@ -49,8 +49,8 @@ const RandomMessage = () => {
       setMessage(messages[randomIndex]);
     };
     changeMessage();
-    // 대충 4~5초
-    const intervalId = setInterval(changeMessage, 4000 + Math.random() * 1000);
+    // 대충 6~7초
+    const intervalId = setInterval(changeMessage, 6000 + Math.random() * 1000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -315,8 +315,8 @@ const handlePen = () => {
               key={predefinedColor}
               style={{
                 backgroundColor: color === predefinedColor ? 'transparent' : predefinedColor,
-                width: 21, 
-                height: 21, 
+                width: 29, 
+                height: 29, 
                 margin: '2px', 
                 border: color === predefinedColor ? `2px solid ${predefinedColor}, 2px solid black` : '2px solid grey',
                 borderRadius: '50%',
@@ -383,7 +383,7 @@ const handlePen = () => {
             },
           }}
         >
-        <img src="/assets/title.png" alt="Loading..." style={{  maxWidth: '300px', maxHeight: '300px', borderRadius: '10px' }} />
+        <img src="/assets/jeoungB.gif" alt="Loading..." style={{  maxWidth: '300px', maxHeight: '300px', borderRadius: '10px' }} />
         <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif', }}>이미지를 그리고 있어요~</p>
         <RandomMessage/>
         </Modal>
