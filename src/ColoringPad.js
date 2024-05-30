@@ -60,7 +60,7 @@ const RandomMessage = () => {
   }, []);
 
   return (
-    <p style={{ fontSize: '18px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>{message}</p>
+    <p style={{ fontSize: '18px', fontFamily: 'KCCMurukmuruk, sans-serif', color: '#ec7499' }}>{message}</p>
   );
 };
 
@@ -371,20 +371,27 @@ const handlePen = () => {
           isOpen={modalIsOpen}
           contentLabel="로딩 중"
           style={{
+            overlay : {
+              backgroundColor : '#FEEFE1',
+            },
             content: {
               top: '50%',
               left: '50%',
               right: 'auto',
               bottom: 'auto',
-              marginRight: '-50%',
+              marginRight: '50%',
               transform: 'translate(-50%, -50%)',
               textAlign: 'center',
               border: 'none',
+              backgroundColor: '#FEEFE1',
+              width : '60%',
+              height : '70%',
+              overflow: 'hidden',
             },
           }}
         >
-        <img src="/assets/loadingimage.jpg" alt="Loading..." style={{ borderRadius: '10px' }} />
-        <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif'  }}>이미지를 그리고 있어요~</p>
+        <img src="/assets/title.png" alt="Loading..." style={{  maxWidth: '300px', maxHeight: '300px', borderRadius: '10px' }} />
+        <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif', }}>이미지를 그리고 있어요~</p>
         <RandomMessage/>
         </Modal>
       </div>
