@@ -5,15 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import { useLocation } from 'react-router-dom';
 import nextIcon from './assets/DMD-05.png';
+import previousIcon from './assets/DMD-06.png';
 
 const predefinedColors = [
-  '#E6E6FA', '#99FF99', '#FFFF00', '#FFFFFF', '#FFE4E1',
-  '#FFDAB9', '#FFD700', '#FFC0CB', '#FFB6C1', '#FFA07A',
-  '#FF69B4', '#FF6347', '#FF0000', '#FAE7B5', '#FADADD',
-  '#F4C2C2', '#CB99C9', '#ADFF2F', '#A9A9A9', '#A52A2A',
-  '#8B0000', '#800080', '#582900', '#5D3FD3', '#087830',
-  '#00FFFF', '#008000', '#00416A', '#0000FF', '#00008B',
-  '#000000'
+  '#000000', '#FFFFFF', '#FFFAF0', '#F8F8FF', '#DCDCDC', 
+  '#FFFACD', '#FAFAD2', '#FFE4B5', '#FFDEAD', '#FFDAB9', 
+  '#FFEB3B', '#FFD700', '#FFA500', '#FF8C00', '#FF4500', 
+  '#FF0000', '#DC143C', '#FF69B4', '#FF1493', '#C71585', 
+  '#DB7093', '#DDA0DD', '#EE82EE', '#DA70D6', '#BA55D3', 
+  '#9932CC', '#9400D3', '#8A2BE2', '#8B008B', '#800080', 
+  '#4B0082', '#6A5ACD', '#483D8B', '#0000FF', '#0000CD', 
+  '#00008B', '#000080', '#191970', '#1E90FF', '#00BFFF', 
+  '#87CEEB', '#00FFFF', '#40E0D0', '#20B2AA', '#008B8B', 
+  '#008080', '#3CB371', '#2E8B57', '#556B2F', '#6B8E23', 
+  '#808000', '#ADFF2F', '#7FFF00', '#006400', '#008000',
 ];
 
 const messages = [
@@ -90,6 +95,10 @@ const ColoringPad = () => {
     }
   }
 
+  const goToDrawMyDayPage = () => {
+    navigate('/drawmyday');
+  }
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
@@ -115,6 +124,9 @@ const ColoringPad = () => {
           setModalIsOpen(false);
         };
       }
+      // else { 
+      //   setModalIsOpen(false);
+      // }
     };
   }, [image]);
 
@@ -242,7 +254,7 @@ const handlePen = () => {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', width: '1000px',  gap: '10px', padding: '10px', backgroundColor: 'white', borderRadius: '10px', border: '1px solid #ccc'}}>
         {/* 첫 번째 버튼 그룹 */}
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '10px', marginLeft: '50px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', marginLeft: '1px', marginRight: '10px' }}>
           <button onClick={handlePen} 
           style = {{
             backgroundImage: `url(/assets/bt_brush_on.png)`,
@@ -276,7 +288,7 @@ const handlePen = () => {
           </button>
         </div>
         {/* 두 번째 버튼 그룹 */}
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', marginLeft: '20px', marginRight: '30px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', marginLeft: '60px', marginRight: '60px' }}>
         <button 
           onClick={handleUndo} 
           style={{ 
@@ -304,18 +316,19 @@ const handlePen = () => {
           }}>
         </button>
         </div>
-        <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap', maxWidth: '300px' }}>
+        <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap', maxWidth: '400px', marginLeft: '15px', marginRight: '1px', scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
           {predefinedColors.map((predefinedColor) => (
             <button
               key={predefinedColor}
               style={{
                 backgroundColor: color === predefinedColor ? 'transparent' : predefinedColor,
-                width: 28, 
-                height: 28, 
+                width: 21, 
+                height: 21, 
                 margin: '2px', 
-                border: color === predefinedColor ? `1px solid ${predefinedColor}` : '1px solid grey',
+                border: color === predefinedColor ? `2px solid ${predefinedColor}, 2px solid black` : '2px solid grey',
                 borderRadius: '50%',
                 boxSizing: 'border-box',
+                outline: color === predefinedColor ? `2px solid ${predefinedColor}` : 'none'
               }}
               onClick={() => handleColorClick(predefinedColor)}
             />
@@ -323,6 +336,20 @@ const handlePen = () => {
         </div>
       </div>
       <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+      <img
+        src={previousIcon}
+        alt="Go to Draw My Day Page"
+        style={{ 
+          cursor: 'pointer', 
+          position: 'absolute', 
+          left: '0', // 왼쪽 끝에 위치
+          top: '50%', // Y축 중앙에 위치
+          transform: 'translateY(140%)', // Y축 중앙으로 조정
+          width: '50px', // 이미지의 너비 조정
+          height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
+        }}
+        onClick={goToDrawMyDayPage}
+      />
         <img
           src={nextIcon}
           alt="Go to Complete"
