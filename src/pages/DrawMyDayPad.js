@@ -2,9 +2,10 @@
 
 import React, { useState, useRef, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import KakaoTalk_20240510_211849584 from '../assets/KakaoTalk_20240510_211849584.png';
+// import KakaoTalk_20240510_211849584 from '../assets/KakaoTalk_20240510_211849584.png';
 import axios from 'axios';
 import saveSendIcon from '../assets/DMD-05.png';
+import testImage from '../assets/test3.png';
 
 const DrawMyDayPad = () => {
   const [stateStack, setStateStack] = useState([]);
@@ -14,9 +15,8 @@ const DrawMyDayPad = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
   const pathRef = useRef([]);
-  const [isEraserMode, setIsEraserMode] = useState(false);
+  const [isEraserMode] = useState(false);
   const navigate = useNavigate();
-  const isEraserModeRef = useRef(isEraserMode);
   const [isClearAllActive, setIsClearAllActive] = useState(false);
   const [isUndoActive, setIsUndoActive] = useState(false);
   const [isRedoActive, setIsRedoActive] = useState(false);
@@ -81,9 +81,11 @@ const DrawMyDayPad = () => {
 
     const image = new Image();
     image.onload = function(){
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      canvas.width = image.width;
+      canvas.height = image.height;
+      context.drawImage(image, 0, 0);
     };
-    image.src = KakaoTalk_20240510_211849584;
+    image.src = testImage;
 
     const initializeDrawingSettings = () => {
         context.strokeStyle = color; 
@@ -145,24 +147,6 @@ const DrawMyDayPad = () => {
     };
   }, [color, isDrawing, penSize]);
     
-  const activatePenMode = () => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    context.globalCompositeOperation = 'source-over'; // 그림 그리기 모드
-    context.lineWidth = penSize; // 펜 크기
-    isEraserModeRef.current = false;
-    setIsEraserMode(false);
-  };
-
-  const activateEraserMode = () => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    context.globalCompositeOperation = 'destination-out'; // 지우개 모드
-    context.lineWidth = 10; // 지우개 크기
-    isEraserModeRef.current = true;
-    setIsEraserMode(true);
-  };
-    
   const handleClearAll = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
@@ -175,7 +159,7 @@ const DrawMyDayPad = () => {
     image.onload = function() {
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
     };
-    image.src = KakaoTalk_20240510_211849584;
+    image.src = testImage;
   };
     
 
@@ -230,7 +214,6 @@ const DrawMyDayPad = () => {
         <div style={{ display: 'flex', flexDirection: 'row', gap: '30px', marginLeft: '50px' }}>
           <button
             className={`btn ${!isEraserMode ? 'btn-selected' : ''}`}
-            onClick={activatePenMode}
             style={{
               backgroundImage: `url(/assets/DMD-10.png)`,
               backgroundSize: 'cover',
@@ -238,19 +221,6 @@ const DrawMyDayPad = () => {
               height: '30px',
               backgroundColor: 'transparent',
               opacity: !isEraserMode ? 1 : 0.5,
-              border: 'none'
-            }}
-          ></button>
-          <button
-            className={`btn ${isEraserMode ? 'btn-selected' : ''}`}
-            onClick={activateEraserMode}
-            style={{
-              backgroundImage: `url(/assets/DMD-08.png)`,
-              backgroundSize: 'cover',
-              width: '30px',
-              height: '30px',
-              backgroundColor: 'transparent',
-              opacity: isEraserMode ? 1 : 0.5,
               border: 'none'
             }}
           ></button>

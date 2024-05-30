@@ -75,6 +75,41 @@ html, body {
   }
 }
 
+.pen-size-slider-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  height: 100px; /* 원하는 높이로 조정하세요 */
+}
+
+.pen-size-slider {
+  width: 80%;
+  height: 9px;
+  border-radius: 5px;
+  background: red;
+  outline: none;
+}
+
+.pen-size-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.pen-size-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+
 .main-container {
   display: flex;
   flex-direction: column;

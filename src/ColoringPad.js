@@ -1,13 +1,10 @@
 //ColoringPad.js
 
 import React, { useState, useRef, useEffect} from 'react';
-import { FaPencilAlt, FaEraser } from 'react-icons/fa';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom'; 
-import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
 import Modal from 'react-modal';
 import { useLocation } from 'react-router-dom';
+import nextIcon from './assets/DMD-05.png';
 
 const predefinedColors = [
   '#E6E6FA', '#99FF99', '#FFFF00', '#FFFFFF', '#FFE4E1',
@@ -76,6 +73,9 @@ const ColoringPad = () => {
   const [modalIsOpen, setModalIsOpen] = useState(true);
   const location = useLocation();
   const { image } = location.state || {};
+  const [isClearAllActive, setIsClearAllActive] = useState(false);
+  const [isUndoActive, setIsUndoActive] = useState(false);
+  const [isRedoActive, setIsRedoActive] = useState(false);
 
   let navigate = useNavigate();  
   
@@ -171,6 +171,13 @@ const ColoringPad = () => {
   
 }, [color, isDrawing, penSize]);
 
+const handlePen = () => {
+  // 이레이저 모드가 활성화되어 있다면, 이를 비활성화하고 펜 모드로 전환합니다.
+  isEraserModeRef.current = false;
+  // 펜 사이즈를 사용자가 마지막으로 설정한 값(또는 기본값)으로 설정합니다.
+  setPenSize(5); // 여기서 5는 예시 값입니다. 실제로는 사용자가 설정한 펜 사이즈를 사용해야 합니다.
+};
+
   useEffect(() => {
     if (!imageLoaded) return;
 
@@ -188,11 +195,6 @@ const ColoringPad = () => {
     setColor(predefinedColor);
   };
     
-  const toggleEraserMode = () => {
-    isEraserModeRef.current = !isEraserModeRef.current;
-    setPenSize(isEraserModeRef.current ? 20 : 5);
-  };
-    
   const handlePenSizeChange = (e) => {
     setPenSize(parseInt(e.target.value, 10));
   };
@@ -202,13 +204,17 @@ const ColoringPad = () => {
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     pathRef.current = [];
+    setIsClearAllActive(true);
+    setTimeout(() => setIsClearAllActive(false), 200);
   };
 
   const handleUndo = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const lastState = stateStack[stateStack.length - 1];
-      
+    setIsUndoActive(true);
+    setTimeout(() => setIsUndoActive(false), 200);
+
     if (lastState) {
       const newStack = stateStack.slice(0, stateStack.length - 1);
       context.putImageData(lastState, 0, 0);
@@ -221,6 +227,8 @@ const ColoringPad = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const nextState = redoStack[0];
+    setIsRedoActive(true);
+    setTimeout(() => setIsRedoActive(false), 200);
       
     if (nextState) {
       const newStack = redoStack.slice(1);
@@ -230,34 +238,82 @@ const ColoringPad = () => {
     } 
   };
   
-    
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', width: '800px',  gap: '10px', padding: '10px', backgroundColor: '#AED9E0', borderRadius: '10px', border: '1px solid #ccc'}}>
-        <button onClick={toggleEraserMode}>{isEraserModeRef.current ? <FaPencilAlt size="15" /> : <FaEraser size="15" />}</button>
-        <input
-          type="range"
-          min="1"
-          max="20"
-          step="1"
-          value={penSize}
-          onChange={handlePenSizeChange}
-        />
-        <button onClick={handleClearAll} style={{ margin: '3px' }}><DeleteIcon /></button>
-        <button onClick={handleUndo} style={{ margin: '1px' }}><UndoIcon /></button>
-        <button onClick={handleRedo} style={{ margin: '1px' }}><RedoIcon /></button>
-        <button onClick={goToCompletePad} style={{ margin: '5px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>완성</button>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', width: '1000px',  gap: '10px', padding: '10px', backgroundColor: 'white', borderRadius: '10px', border: '1px solid #ccc'}}>
+        {/* 첫 번째 버튼 그룹 */}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '10px', marginLeft: '50px' }}>
+          <button onClick={handlePen} 
+          style = {{
+            backgroundImage: `url(/assets/bt_brush_on.png)`,
+            backgroundSize: 'cover',
+            width: '30px',
+            height: '30px',
+            backgroundColor: 'transparent',
+            border : 'none',
+          }}>
+          </button>
+          <input
+            type="range"
+            min="1"
+            max="20"
+            step="1"
+            value={penSize}
+            onChange={handlePenSizeChange}
+          />
+          <button onClick={handleClearAll} 
+            style={{ 
+              backgroundImage: `url(/assets/bt_trash.png)`,
+              backgroundSize: 'cover',
+              width: '30px',
+              height: '30px',
+              backgroundColor: 'transparent',
+              opacity: isClearAllActive ? 1 : 0.5,
+              border: 'none',
+              margin: '3px', 
+            }}>
             
-        <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap' }}>
+          </button>
+        </div>
+        {/* 두 번째 버튼 그룹 */}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', marginLeft: '20px', marginRight: '30px' }}>
+        <button 
+          onClick={handleUndo} 
+          style={{ 
+            backgroundImage: `url(/assets/bt_back_on.png)`,
+            backgroundSize: 'cover',
+            width: '30px',
+            height: '30px',
+            backgroundColor: 'transparent',
+            opacity: isUndoActive ? 1 : 0.5,
+            border : 'none',
+            margin: '3px', 
+            }}>
+            </button>
+        <button 
+          onClick={handleRedo} 
+          style={{
+            backgroundImage: `url(/assets/bt_fw_on.png)`,
+            backgroundSize: 'cover',
+            width: '30px',
+            height: '30px',
+            backgroundColor: 'transparent',
+            opacity: isRedoActive ? 1 : 0.5,
+            border: 'none',
+            margin: '3px', 
+          }}>
+        </button>
+        </div>
+        <div style={{ overflowX: 'auto', display: 'flex', whiteSpace: 'nowrap', maxWidth: '300px' }}>
           {predefinedColors.map((predefinedColor) => (
             <button
               key={predefinedColor}
               style={{
                 backgroundColor: color === predefinedColor ? 'transparent' : predefinedColor,
-                width: 30, 
-                height: 30, 
-                margin: '1px', 
-                border: color === predefinedColor ? `3px solid ${predefinedColor}` : '1px solid grey',
+                width: 28, 
+                height: 28, 
+                margin: '2px', 
+                border: color === predefinedColor ? `1px solid ${predefinedColor}` : '1px solid grey',
                 borderRadius: '50%',
                 boxSizing: 'border-box',
               }}
@@ -265,6 +321,22 @@ const ColoringPad = () => {
             />
           ))}
         </div>
+      </div>
+      <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <img
+          src={nextIcon}
+          alt="Go to Complete"
+          style={{ 
+            cursor: 'pointer', 
+            position: 'absolute', 
+            right: '0', // 오른쪽 끝에 위치
+            top: '50%', // Y축 중앙에 위치
+            transform: 'translateY(140%)', // Y축 중앙으로 조정
+            width: '50px', // 이미지의 너비 조정
+            height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
+          }}
+          onClick={goToCompletePad}
+        />
       </div>
       <div>
         <canvas ref={canvasRef} width={800} height={600} />
