@@ -86,7 +86,7 @@ const ColoringPad = () => {
   
     if (isConfirmed) {
       const canvas = canvasRef.current;
-      const imageDataUrl = canvas.toDataURL("image/png", 0.08);
+      const imageDataUrl = canvas.toDataURL("image/png", 0.007);
       
       navigate('/complete', { state: { imageDataUrl } });
     }
@@ -120,7 +120,7 @@ const ColoringPad = () => {
           context.drawImage(serverImg, imgX, imgY, imgWidth, imgHeight);
           setModalIsOpen(false);
         };
-      }
+      } 
       // else { 
       //   setModalIsOpen(false);
       // }
@@ -151,11 +151,17 @@ const ColoringPad = () => {
         
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
+        contextRef.current = context;
         const img = new Image();
         img.src = `data:image/png;base64,${base64Image}`;
         img.onload = () => {
           context.clearRect(0, 0, canvas.width, canvas.height); 
-          context.drawImage(img, 0, 0, canvas.width, canvas.height); 
+          const imgWidth = canvas.width * 0.9;
+          const imgHeight = canvas.height * 0.9;
+          const imgX = (canvas.width - imgWidth) / 2;
+          const imgY = (canvas.height - imgHeight) / 2 + 20;
+
+          context.drawImage(img,  imgX, imgY, imgWidth, imgHeight); 
           setModalIsOpen(false);
         };
       })
