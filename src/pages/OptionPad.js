@@ -26,21 +26,27 @@ const UserInfoForm = () => {
   };
 
   const handleSubmitToServer = () => {
-    // 성별 변환
+
     const genderConverted = userInfo.gender === 'male' ? 'boy' : userInfo.gender === 'female' ? 'girl' : '';
 
-    const dataToSend = JSON.stringify({
+    const dataToSendObj = {
       age: userInfo.age.toString(), // 나이는 문자열로 변환하여 저장
       gender: genderConverted,
-      glasses: userInfo.glasses ? "true" : "false",
-    });
+    };
+
+    // 안경 착용 여부가 true일 경우에만 데이터에 추가
+  if (userInfo.glasses) {
+    dataToSendObj.glasses = "true";
+  }
+
+  const dataToSend = JSON.stringify(dataToSendObj);
   
-    console.log(dataToSend); // 서버로 보내는 데이터 확인
-    localStorage.setItem('userInfo', dataToSend); // 로컬 스토리지에 저장
+  console.log(dataToSend); // 서버로 보내는 데이터 확인
+  localStorage.setItem('userInfo', dataToSend); // 로컬 스토리지에 저장
 
-    alert("저장되었습니다.");
+  alert("저장되었습니다.");
 
-    navigateToMemoryPad();
+  navigateToMemoryPad();
   };
   
   const navigateToMemoryPad = () => navigate('/');
