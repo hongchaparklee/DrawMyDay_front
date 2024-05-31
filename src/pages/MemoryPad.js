@@ -68,7 +68,7 @@ const MemoryPad = () => {
             {memories.length > 0 && (
                 <div style={{ position: 'relative', display: 'inline-block', marginTop: '60px' }}>
                     <button onClick={handlePrev} style={{ ...buttonStyle, position: 'absolute', left: '-27px', top: '50%', transform: 'translateY(-50%)' }}>
-                        <img src={`${process.env.PUBLIC_URL}/assets/DMD-06.png`} alt="Previous" style={iconButtonStyle} />
+                        <img src={`${process.env.PUBLIC_URL}/assets/prevv.png`} alt="Previous" style={iconButtonStyle} />
                     </button>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
                         {memories[currentIndex].images.map((image, index) => (
@@ -83,8 +83,8 @@ const MemoryPad = () => {
                             {memories[currentIndex].date}
                         </div>
                     </div>
-                    <button onClick={handleNext} style={{ ...buttonStyle, position: 'absolute', right: '-25x', top: '50%', transform: 'translateY(-50%)' }}> {/* 변경사항 적용 */}
-                        <img src={`${process.env.PUBLIC_URL}/assets/DMD-05.png`} alt="Next" style={iconButtonStyle} />
+                    <button onClick={handleNext} style={{ ...buttonStyle, position: 'absolute', right: '-27px', top: '50%', transform: 'translateY(-50%)' }}> {/* 변경사항 적용 */}
+                        <img src={`${process.env.PUBLIC_URL}/assets/nextt.png`} alt="Next" style={iconButtonStyle} />
                     </button>
                 </div>
             )}

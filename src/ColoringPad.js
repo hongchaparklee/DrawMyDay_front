@@ -86,7 +86,7 @@ const ColoringPad = () => {
   
     if (isConfirmed) {
       const canvas = canvasRef.current;
-      const imageDataUrl = canvas.toDataURL("image/png", 0.1);
+      const imageDataUrl = canvas.toDataURL("image/png", 0.08);
       
       navigate('/complete', { state: { imageDataUrl } });
     }
@@ -115,7 +115,7 @@ const ColoringPad = () => {
           const imgWidth = canvas.width * 0.9;
           const imgHeight = canvas.height * 0.9;
           const imgX = (canvas.width - imgWidth) / 2;
-          const imgY = (canvas.height - imgHeight) / 2;
+          const imgY = (canvas.height - imgHeight) / 2 + 20;
   
           context.drawImage(serverImg, imgX, imgY, imgWidth, imgHeight);
           setModalIsOpen(false);
