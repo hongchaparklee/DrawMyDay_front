@@ -1,15 +1,11 @@
-// // OptionPad.js
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const saveButtonImage = `${process.env.PUBLIC_URL}/assets/saveBu.png`;
 
 const UserInfoForm = () => {
   const [userInfo, setUserInfo] = useState({
     name: '',
     school: '',
-    age: '',
+    age: '', // 나이는 문자열로 초기화
     gender: '',
     glasses: false,
   });
@@ -30,16 +26,19 @@ const UserInfoForm = () => {
   };
 
   const handleSubmitToServer = () => {
+    // 성별 변환
+    const genderConverted = userInfo.gender === 'male' ? 'boy' : userInfo.gender === 'female' ? 'girl' : '';
+
     const dataToSend = JSON.stringify({
-      ...userInfo,
+      age: userInfo.age.toString(), // 나이는 문자열로 변환하여 저장
+      gender: genderConverted,
       glasses: userInfo.glasses ? "true" : "false",
-      age: userInfo.age.toString(),
     });
   
-    console.log(dataToSend);
-    localStorage.setItem('userInfo', dataToSend);
+    console.log(dataToSend); // 서버로 보내는 데이터 확인
+    localStorage.setItem('userInfo', dataToSend); // 로컬 스토리지에 저장
 
-    alert("저장된건가?");
+    alert("저장되었습니다.");
 
     navigateToMemoryPad();
   };
@@ -88,7 +87,7 @@ const UserInfoForm = () => {
       <div>
         <label>나이 : </label>
         <input
-          type="text"
+          type="number" // 숫자만 입력받도록 설정
           name="age"
           value={userInfo.age}
           onChange={handleChange}
@@ -104,8 +103,8 @@ const UserInfoForm = () => {
           style={inputStyle}
         >
           <option value="">선택하세요</option>
-          <option value="male">남성</option>
-          <option value="female">여성</option>
+          <option value="boy">남자</option>
+          <option value="girl">여자</option>
         </select>
       </div>
       <div>
@@ -118,17 +117,24 @@ const UserInfoForm = () => {
           style={{ margin: '10px' }}
         />
       </div>
-      <img
-        src={saveButtonImage}
-        alt="저장 버튼"
-        style={{ 
+      <button type="submit" style={{ 
           cursor: 'pointer',
           marginTop: '10px',
           width : '80px',
           height : 'auto',  
-        }}
-        onClick={handleSubmit} 
-      />
+          border: 'none',
+          background: 'none',
+          padding: 0,
+        }}>
+        <img
+          src={`${process.env.PUBLIC_URL}/assets/saveBu.png`}
+          alt="저장 버튼"
+          style={{ 
+            width : '100%',
+            height : 'auto',  
+          }}
+        />
+      </button>
     </form>
   );
 };
