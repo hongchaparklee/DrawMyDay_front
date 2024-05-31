@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import { useLocation } from 'react-router-dom';
 import nextIcon from './assets/DMD-05.png';
 import previousIcon from './assets/DMD-06.png';
+import axios from 'axios';
 
 const predefinedColors = [
   '#000000', '#FFFFFF', '#FFFAF0', '#F8F8FF', '#DCDCDC', 
@@ -126,6 +127,55 @@ const ColoringPad = () => {
     };
   }, [image]);
 
+  const resendImage = () => {
+    const savedImage = localStorage.getItem('savedImage');
+    if (savedImage) {
+      const base64Response = savedImage.split(',')[1];
+      
+      const blob = base64ToBlob(base64Response, 'image/png');
+  
+      console.log('Blob 생성됨:', blob.size, blob.type); // Blob 객체 확인
+      const formData = new FormData();
+      formData.append('file', blob, 'paper.png');
+
+      setModalIsOpen(true);
+  
+      axios.post('http://3.17.80.177/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(response => {
+        console.log('이미지가 성공적으로 재전송되었습니다.', response.data);
+        const base64Image = response.data.image;
+        
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        const img = new Image();
+        img.src = `data:image/png;base64,${base64Image}`;
+        img.onload = () => {
+          context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스를 초기화합니다.
+          context.drawImage(img, 0, 0, canvas.width, canvas.height); // 이미지를 캔버스에 그립니다.
+          setModalIsOpen(false);
+        };
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
+  };
+  
+  // Base64 문자열을 Blob으로 변환하는 함수
+  function base64ToBlob(base64, mimeType) {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+  }
+  
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -360,6 +410,7 @@ const handlePen = () => {
       </div>
       <div>
         <canvas ref={canvasRef} width={800} height={600} />
+        <button onClick={resendImage}>이미지 재전송</button>
         <Modal
           isOpen={modalIsOpen}
           contentLabel="로딩 중"

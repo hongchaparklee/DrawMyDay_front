@@ -48,6 +48,13 @@ const DrawMyDayPad = () => {
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.toBlob(blob => {
+        const reader = new FileReader();
+        reader.onloadend = () => { // 올바른 이벤트 핸들러 이름으로 변경
+          const base64data = reader.result;
+          localStorage.setItem('savedImage', base64data);
+        };
+        reader.readAsDataURL(blob); // Blob을 Base64로 변환
+
         const formData = new FormData(); 
         formData.append('file', blob, 'paper.png'); 
 
