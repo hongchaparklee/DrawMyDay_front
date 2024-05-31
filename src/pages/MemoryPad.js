@@ -36,7 +36,7 @@ const MemoryPad = () => {
         position: 'absolute',
         right: '10px',
         bottom: '10px',
-        fontFamily: 'KCCMurukmuruk',
+        fontFamily: 'UhBeeSehyun',
         fontSize: '15px',
         backgroundColor: 'transparent',
         padding: '5px',
@@ -58,7 +58,7 @@ const MemoryPad = () => {
     
     return (
         <div style={{ textAlign: 'center', position: 'relative', marginTop: '80px' }}>
-            <h1 style={{fontSize: '20px', fontFamily: 'KCCMurukmuruk', position: 'absolute', top: '0', left: '410px', margin: '10px' }}>내 추억 보기</h1>
+            <h1 style={{fontSize: '20px', fontFamily: 'UhBeeSehyun', position: 'absolute', top: '0', left: '410px', margin: '10px' }}>내 추억 보기</h1>
             <img 
                 src={`${process.env.PUBLIC_URL}/assets/home.png`} 
                 alt="메인 페이지로" 

@@ -41,8 +41,8 @@ const UserInfoForm = () => {
 
   const dataToSend = JSON.stringify(dataToSendObj);
   
-  console.log(dataToSend); // 서버로 보내는 데이터 확인
-  localStorage.setItem('userInfo', dataToSend); // 로컬 스토리지에 저장
+  console.log(dataToSend); 
+  localStorage.setItem('userInfo', dataToSend);
 
   alert("저장되었습니다.");
 
@@ -57,7 +57,7 @@ const UserInfoForm = () => {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: '100vh',
-    fontFamily: 'KCCMurukmuruk, sans-serif',
+    fontFamily: 'UhBeeSehyun, sans-serif',
   };
 
   const inputStyle = {

@@ -57,7 +57,7 @@ const RandomMessage = () => {
   }, []);
 
   return (
-    <p style={{ fontSize: '18px', fontFamily: 'KCCMurukmuruk, sans-serif', color: '#ec7499' }}>{message}</p>
+    <p style={{ fontSize: '18px', fontFamily: 'UhBeeSehyun, sans-serif', color: '#ec7499' }}>{message}</p>
   );
 };
 
@@ -134,7 +134,7 @@ const ColoringPad = () => {
       
       const blob = base64ToBlob(base64Response, 'image/png');
   
-      console.log('Blob 생성됨:', blob.size, blob.type); // Blob 객체 확인
+      console.log('Blob 생성됨:', blob.size, blob.type); 
       const formData = new FormData();
       formData.append('file', blob, 'paper.png');
 
@@ -154,8 +154,8 @@ const ColoringPad = () => {
         const img = new Image();
         img.src = `data:image/png;base64,${base64Image}`;
         img.onload = () => {
-          context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스를 초기화합니다.
-          context.drawImage(img, 0, 0, canvas.width, canvas.height); // 이미지를 캔버스에 그립니다.
+          context.clearRect(0, 0, canvas.width, canvas.height); 
+          context.drawImage(img, 0, 0, canvas.width, canvas.height); 
           setModalIsOpen(false);
         };
       })
@@ -385,11 +385,11 @@ const handlePen = () => {
           style={{ 
             cursor: 'pointer', 
             position: 'absolute', 
-            left: '0', // 왼쪽 끝에 위치
-            top: '50%', // Y축 중앙에 위치
-            transform: 'translateY(140%)', // Y축 중앙으로 조정
-            width: '50px', // 이미지의 너비 조정
-            height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
+            left: '0', 
+            top: '50%', 
+            transform: 'translateY(140%)', 
+            width: '50px', 
+            height: 'auto', 
           }}
           onClick={goToDrawMyDayPage}
         />
@@ -399,18 +399,20 @@ const handlePen = () => {
           style={{ 
             cursor: 'pointer', 
             position: 'absolute', 
-            right: '0', // 오른쪽 끝에 위치
-            top: '50%', // Y축 중앙에 위치
-            transform: 'translateY(140%)', // Y축 중앙으로 조정
-            width: '50px', // 이미지의 너비 조정
-            height: 'auto' // 이미지의 높이를 자동으로 조정하여 비율 유지
+            right: '0', 
+            top: '50%', 
+            transform: 'translateY(140%)', 
+            width: '50px', 
+            height: 'auto' 
           }}
           onClick={goToCompletePad}
         />
       </div>
       <div>
         <canvas ref={canvasRef} width={800} height={600} />
-        <button onClick={resendImage}>이미지 재전송</button>
+        <button onClick={resendImage} style={{ position: 'absolute', right: '120px', bottom : '30px', border: 'none', background: 'none', padding: 0 }}>
+          <img src={process.env.PUBLIC_URL + '/assets/reload.png'} alt="이미지 재전송" style={{ width: '45px', height: '45px' }} />
+        </button>
         <Modal
           isOpen={modalIsOpen}
           contentLabel="로딩 중"
@@ -435,7 +437,7 @@ const handlePen = () => {
           }}
         >
         <img src="/assets/jeoungB.gif" alt="Loading..." style={{  maxWidth: '300px', maxHeight: '300px', borderRadius: '10px' }} />
-        <p style={{ fontSize: '38px', fontFamily: 'KCCMurukmuruk, sans-serif', }}>이미지를 그리고 있어요~</p>
+        <p style={{ fontSize: '38px', fontFamily: 'UhBeeSehyun, sans-serif', }}>이미지를 그리고 있어요~</p>
         <RandomMessage/>
         </Modal>
       </div>

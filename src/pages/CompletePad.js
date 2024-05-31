@@ -14,6 +14,7 @@ const CompletePad = () => {
         marginTop: '1px',
         marginBottom: '10px',
         color : '#6b8731',
+        fontFamily: 'UhBeeSehyun, sans-serif',
     };
 
     const containerStyle = {
@@ -109,7 +110,7 @@ const CompletePad = () => {
                         style={cuteButtonStyle} 
                         onClick={navigateToMainPage} 
                     />
-                    <div style={{ fontSize: '14px', fontFamily: 'KCCMurukmuruk, sans-serif'}}>메인으로</div>
+                    <div style={{ fontSize: '14px', fontFamily: 'UhBeeSehyun, sans-serif'}}>메인으로</div>
                 </div>
                 <div style = {{ textAlign : 'center '}}>
                     <img 
@@ -118,7 +119,7 @@ const CompletePad = () => {
                         style={cuteButtonStyle} 
                         onClick={saveToMemory} 
                     />
-                    <div style={{ fontSize: '14px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>추억저장</div>
+                    <div style={{ fontSize: '14px', fontFamily: 'UhBeeSehyun, sans-serif' }}>추억저장</div>
                 </div>
                 <div style = {{ textAlign : 'center '}}>
                     <img 
@@ -127,7 +128,7 @@ const CompletePad = () => {
                         style={cuteButtonStyle} 
                         onClick={navigateToMemoryPad} 
                     />
-                    <div style={{ fontSize: '14px', fontFamily: 'KCCMurukmuruk, sans-serif' }}>추억 속으로</div>
+                    <div style={{ fontSize: '14px', fontFamily: 'UhBeeSehyun, sans-serif' }}>추억 속으로</div>
                 </div>
             </div>
         </div>
