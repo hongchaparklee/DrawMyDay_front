@@ -137,7 +137,7 @@ const ColoringPad = () => {
       console.log('Blob 생성됨:', blob.size, blob.type); 
       const formData = new FormData();
       formData.append('file', blob, 'paper.png');
-
+  
       setModalIsOpen(true);
   
       axios.post('http://3.17.80.177/upload', formData, {
@@ -152,17 +152,26 @@ const ColoringPad = () => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         contextRef.current = context;
-        const img = new Image();
-        img.src = `data:image/png;base64,${base64Image}`;
-        img.onload = () => {
+  
+        // 캔버스를 초기화하고 sketch.png 이미지를 먼저 그리기
+        const localImg = new Image();
+        localImg.src = '/assets/sketch.png';
+        localImg.onload = () => {
           context.clearRect(0, 0, canvas.width, canvas.height); 
-          const imgWidth = canvas.width * 0.9;
-          const imgHeight = canvas.height * 0.9;
-          const imgX = (canvas.width - imgWidth) / 2;
-          const imgY = (canvas.height - imgHeight) / 2 + 20;
+          context.drawImage(localImg, 0, 0, canvas.width, canvas.height); 
+  
+          // 서버에서 받은 이미지를 그리기
+          const img = new Image();
+          img.src = `data:image/png;base64,${base64Image}`;
+          img.onload = () => {
+            const imgWidth = canvas.width * 0.9;
+            const imgHeight = canvas.height * 0.9;
+            const imgX = (canvas.width - imgWidth) / 2;
+            const imgY = (canvas.height - imgHeight) / 2 + 20;
 
-          context.drawImage(img,  imgX, imgY, imgWidth, imgHeight); 
-          setModalIsOpen(false);
+            context.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+            setModalIsOpen(false);
+          };
         };
       })
       .catch((error) => {
@@ -170,6 +179,7 @@ const ColoringPad = () => {
       });
     }
   };
+  
   
   // Base64 문자열을 Blob으로 변환하는 함수
   function base64ToBlob(base64, mimeType) {
