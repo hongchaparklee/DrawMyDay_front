@@ -55,13 +55,25 @@ const DrawMyDayPad = () => {
         };
         reader.readAsDataURL(blob);
 
-        const formData = new FormData(); 
-        formData.append('file', blob, 'paper.png'); 
-
+        const userInfoFormData = new FormData(); 
         const userInfo = localStorage.getItem('userInfo');
         if (userInfo) {
-          formData.append('userInfo', userInfo);
+          userInfoFormData.append('userInfo', userInfo);
+          axios.post('http://3.17.80.177/userinfo', userInfoFormData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            console.log('사용자 정보가 성공적으로 전송되었습니다.', response.data);
+          })
+          .catch((error) => {
+            console.error('사용자 정보 전송 오류:', error);
+          });
         }
+
+        const formData = new FormData(); 
+        formData.append('file', blob, 'paper.png'); 
 
         axios.post('http://3.17.80.177/upload', formData, {
           headers: {
@@ -74,11 +86,12 @@ const DrawMyDayPad = () => {
           goToColoringPad(base64Image);
         })
         .catch((error) => {
-          console.error('Error:', error);
+          console.error('이미지 전송 오류:', error);
         });
       }, 'image/png');
     }
   };
+
 
   useEffect(() => {
     const canvas = canvasRef.current;

@@ -1,5 +1,3 @@
-//CompletedPad.js
-
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; 
 
@@ -8,6 +6,7 @@ const CompletePad = () => {
     const navigate = useNavigate(); 
     const { imageDataUrl } = location.state;
     const [additionalImageDataUrl, setAdditionalImageDataUrl] = useState('');
+    const [fetchedString, setFetchedString] = useState('');
 
     const headingStyle = {
         fontSize: '34px',
@@ -21,7 +20,7 @@ const CompletePad = () => {
         display: 'flex',
         flexDirection: 'column', 
         alignItems: 'center', 
-        marginBottom: '1px',
+        marginBottom: '0px',
         padding: '20px',
         overflowY: 'auto',
         height: '100vh',
@@ -52,42 +51,80 @@ const CompletePad = () => {
         marginTop: '10px',
     };
 
+    const addSpacesEveryNineCharacters = (str) => {
+        // 연속된 공백을 하나의 공백으로 변환
+        str = str.replace(/\s+/g, ' ');
+        const words = str.split(' '); // 단어 단위로 분리
+        let currentLine = '';
+        let result = '';
+      
+        words.forEach(word => {
+          if ((currentLine + word).length < 16) {
+            // 현재 줄에 단어를 추가할 수 있으면 추가
+            currentLine += (currentLine.length > 0 ? ' ' : '') + word;
+          } else if (word.length > 16) {
+            // 단어 자체가 16자를 초과하는 경우
+            if (currentLine.length > 0) {
+              result += currentLine + '\n'; // 현재 줄을 결과에 추가하고 줄바꿈
+              currentLine = ''; // 현재 줄 초기화
+            }
+            // 긴 단어를 적절히 분할
+            while (word.length > 15) {
+              result += word.substring(0, 9) + '\n'; // 9자리까지 잘라서 결과에 추가
+              word = word.substring(9); // 남은 단어 업데이트
+            }
+            currentLine = word; // 남은 단어를 현재 줄에 설정
+          } else {
+            // 현재 줄이 꽉 찼으면 결과에 추가하고 새 줄 시작
+            if (currentLine.length > 0) {
+              result += currentLine + '\n';
+            }
+            currentLine = word;
+          }
+        });
+      
+        if (currentLine.length > 0) {
+          result += currentLine; // 남은 내용 추가
+        }
+      
+        return result;
+      };
+      
     useEffect(() => {
-        const imageUrl = '@@@@@@@서버 이미지 주소@@@@@@@';
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
+        const imageUrl = 'http://3.17.80.177/text';
         fetch(imageUrl)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                // JSON인지 Blob인지 판별
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    return response.json();
-                } else {
-                    return response.blob(); 
-                }
+                return response.json();
             })
             .then((data) => {
-                if (data instanceof Blob) {
-                    // Blob 데이터를 처리
-                    const imageObjectURL = URL.createObjectURL(data);
-                    setAdditionalImageDataUrl(imageObjectURL);
+                if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'string') {
+                    setFetchedString(data[0]);
                 } else if (data.image) {
-                    // JSON 데이터를 처리
                     setAdditionalImageDataUrl(data.image);
                 } else {
                     throw new Error('Unexpected response format');
                 }
             })
             .catch((error) => console.error('Error:', error));
-    }, []);
+    };
     
     const saveToMemory = () => {
         const memories = JSON.parse(localStorage.getItem('memories')) || [];
+        const formattedString = addSpacesEveryNineCharacters(fetchedString);
+
         const newMemory = {
             date: new Date().toLocaleDateString('ko-KR'),
-            images: [imageDataUrl, additionalImageDataUrl].filter(url => url !== '')
+            images: [imageDataUrl, additionalImageDataUrl].filter(url => url !== ''),
+            text: formattedString,
         };
+        
         memories.push(newMemory);
         localStorage.setItem('memories', JSON.stringify(memories));
         alert('저장되었습니다!');
@@ -100,8 +137,21 @@ const CompletePad = () => {
     return (
         <div style={containerStyle}>
             <h1 className="main-heading" style={headingStyle}>오늘의 일기</h1>
-            <img src={imageDataUrl} alt="Colored pad" style={{ marginBottom: '5px' }} />
-            {additionalImageDataUrl && <img src={additionalImageDataUrl} alt="Additional pad" />}
+            <img src={imageDataUrl} alt="Colored pad" style={{ width: '750px', objectFit: 'contain', marginBottom: '0px' }} />
+            {additionalImageDataUrl && <img src={additionalImageDataUrl} alt="Additional pad"  style={{ width: '750px', objectFit: 'contain' }} />}
+            {fetchedString && (
+                <div style={{ padding: '0px', marginTop: '0px', backgroundColor: '#f0f0f0', borderRadius: '8px', width: '750px', height: '200px' }}>
+                <p style={{
+                    fontFamily: 'Pretendard-Medium',
+                    fontSize: '25px',
+                    whiteSpace: 'pre-wrap',
+                    lineHeight: '1.7',  // 줄 간격 조정
+                    textAlign: 'center',
+                }}>
+                {addSpacesEveryNineCharacters(fetchedString)}
+                </p>
+                </div>
+            )}
             <div style={{...buttonWrapperStyle, display: 'flex', justifyContent: 'center', gap: '20px'}}>
                 <div style = {{ textAlign : 'center '}}>
                     <img 

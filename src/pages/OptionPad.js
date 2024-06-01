@@ -5,7 +5,7 @@ const UserInfoForm = () => {
   const [userInfo, setUserInfo] = useState({
     name: '',
     school: '',
-    age: '', // 나이는 문자열로 초기화
+    age: '', 
     gender: '',
     glasses: false,
   });
@@ -26,28 +26,19 @@ const UserInfoForm = () => {
   };
 
   const handleSubmitToServer = () => {
-
-    const genderConverted = userInfo.gender === 'male' ? 'boy' : userInfo.gender === 'female' ? 'girl' : '';
-
-    const dataToSendObj = {
-      age: userInfo.age.toString(), // 나이는 문자열로 변환하여 저장
-      gender: genderConverted,
-    };
-
-    // 안경 착용 여부가 true일 경우에만 데이터에 추가
-  if (userInfo.glasses) {
-    dataToSendObj.glasses = "true";
-  }
-
-  const dataToSend = JSON.stringify(dataToSendObj);
+    const genderConverted = userInfo.gender === 'boy' ? 'boy' : userInfo.gender === 'girl' ? 'girl' : '';
   
-  console.log(dataToSend); 
-  localStorage.setItem('userInfo', dataToSend);
-
-  alert("저장되었습니다.");
-
-  navigateToMemoryPad();
-  };
+    const glassesStatus = userInfo.glasses ? " who wearing glasses," : ",";
+  
+    const dataToSend = `korean, ${userInfo.age} age, ${genderConverted}${glassesStatus}`;
+  
+    console.log(dataToSend); 
+    localStorage.setItem('userInfo', dataToSend); 
+  
+    alert("저장되었습니다.");
+  
+    navigateToMemoryPad(); 
+  };  
   
   const navigateToMemoryPad = () => navigate('/');
 

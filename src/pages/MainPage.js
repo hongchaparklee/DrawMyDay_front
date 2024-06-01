@@ -56,10 +56,10 @@ const MainPage = () => {
 
   const imageStyle = {
     position: 'absolute', 
-    bottom: '-40px', // 아래쪽으로부터 10px
-    left: '-60px', // 왼쪽으로부터 10px
-    width: '73px', // 이미지 너비
-    height: '60px', // 이미지 높이
+    bottom: '-40px',
+    left: '-60px', 
+    width: '73px', 
+    height: '60px',
   };
 
   return (
@@ -68,10 +68,11 @@ const MainPage = () => {
       <div style={boxStyle}> 
         <img src={rocketImage} alt="Rocket Icon" style={imageStyle} />
         Draw My Day로 오늘의 하루를 그려보아요!<br/>
-        일기를 쓰면 일기가 그림으로 변해요!<br/>
         <br/>
-        그림을 색칠하며 나만의 일기를 완성해요!<br/>
-        하루하루의 이야기를 재미있게 기록해 보세요<br/>
+        일기를 쓰면 일기가 그림으로 변해요.<br/>
+        그림을 색칠하며 나만의 일기를 완성해요.<br/>
+        <br/>
+        하루하루의 이야기를 재미있게 기록해보아요!<br/>
       </div>
       <div className="link-container">
         <LinkItem to="/DrawMyDay" image={drawImage} imageSize="52px" fontSize="13px">일기 쓰기</LinkItem>

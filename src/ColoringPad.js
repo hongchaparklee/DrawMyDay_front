@@ -44,7 +44,6 @@ const RandomMessage = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // 메시지를 변경하는 곳
     const changeMessage = () => {
       const randomIndex = Math.floor(Math.random() * messages.length);
       setMessage(messages[randomIndex]);
@@ -153,7 +152,6 @@ const ColoringPad = () => {
         const context = canvas.getContext('2d');
         contextRef.current = context;
   
-        // 캔버스를 초기화하고 sketch.png 이미지를 먼저 그리기
         const localImg = new Image();
         localImg.src = '/assets/sketch.png';
         localImg.onload = () => {
@@ -180,8 +178,6 @@ const ColoringPad = () => {
     }
   };
   
-  
-  // Base64 문자열을 Blob으로 변환하는 함수
   function base64ToBlob(base64, mimeType) {
     const byteCharacters = atob(base64);
     const byteNumbers = new Array(byteCharacters.length);
