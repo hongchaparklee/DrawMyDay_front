@@ -87,17 +87,41 @@ const MemoryPad = () => {
                     {memories[currentIndex]?.date}
                 </div>
 
-                <div style={{ padding: '0px', marginTop: '-29px', backgroundColor: '#f0f0f0', borderRadius: '8px', width: '400px', height: 'auto',  marginLeft: 'auto', marginRight: 'auto', }}>
+                <div style={{ 
+                    padding: '0px', 
+                    marginTop: '0px', 
+                    backgroundColor: '#ffffff', 
+                    borderRadius: '8px', 
+                    width: '400px', 
+                    height: 'auto',  
+                    marginLeft: 'auto', 
+                    marginRight: 'auto', 
+                    position: 'relative', // 컨테이너에 상대적 위치 설정
+                    }}>
+                    <img src="/assets/oharida.png" 
+                        alt="oharida" 
+                        style={{ 
+                            width: '100%',  // 이미지 너비를 컨테이너 너비와 맞춤
+                            height: 'auto', // 이미지 높이를 자동으로 조절하여 비율 유지
+                        }} 
+                    />
                     <p style={{
-                        fontFamily: 'Pretendard-Medium',
-                        fontSize: '25px',
+                        fontFamily: 'KCCMurukmuruk',
+                        fontSize: '21px',
                         whiteSpace: 'pre-wrap',
                         lineHeight: '1.7',
                         textAlign: 'center',
+                        color: 'black', // 텍스트 색상 설정
+                        position: 'absolute', // 텍스트를 절대적 위치로 설정
+                        top: '33%', // 컨테이너 중앙으로 설정
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)', // 정확한 중앙 정렬을 위해 변환 사용
+                        width: '100%', // 텍스트 너비를 컨테이너 너비와 맞춤
                     }}>
-                        {currentMemory.text}
-                    </p>
-                </div>      
+                    {currentMemory.text}
+                </p>
+            </div> 
+     
             </div>
             <button onClick={handlePrev} style={{ ...buttonStyle, position: 'absolute', left: '354px', top: '50%', transform: 'translateY(-50%)' }}>
                 <img src={`${process.env.PUBLIC_URL}/assets/prevv.png`} alt="Previous" style={iconButtonStyle} />

@@ -85,7 +85,7 @@ const ColoringPad = () => {
   
     if (isConfirmed) {
       const canvas = canvasRef.current;
-      const imageDataUrl = canvas.toDataURL("image/png", 0.007);
+      const imageDataUrl = canvas.toDataURL("image/png", 0.00001);
       
       navigate('/complete', { state: { imageDataUrl } });
     }

@@ -140,18 +140,47 @@ const CompletePad = () => {
             <img src={imageDataUrl} alt="Colored pad" style={{ width: '750px', objectFit: 'contain', marginBottom: '0px' }} />
             {additionalImageDataUrl && <img src={additionalImageDataUrl} alt="Additional pad"  style={{ width: '750px', objectFit: 'contain' }} />}
             {fetchedString && (
-                <div style={{ padding: '0px', marginTop: '0px', backgroundColor: '#f0f0f0', borderRadius: '8px', width: '750px', height: '200px' }}>
-                <p style={{
-                    fontFamily: 'Pretendard-Medium',
-                    fontSize: '25px',
-                    whiteSpace: 'pre-wrap',
-                    lineHeight: '1.7',  // 줄 간격 조정
-                    textAlign: 'center',
-                }}>
-                {addSpacesEveryNineCharacters(fetchedString)}
-                </p>
+                <div style={{
+                    padding: '0px',
+                    marginTop: '0px',
+                    backgroundColor: '#f0f0f0',
+                    borderRadius: '8px',
+                    width: '750px',
+                    height: '200px',
+                    position: 'relative', // 컨테이너에 상대적 위치 설정
+                    }}>
+                    <img 
+                    src="/assets/oharida.png" 
+                    alt="oharida" 
+                    style={{
+                        width: '750px',  
+                        maxHeight: '100%',
+                        display: 'block',  
+                        marginLeft: 'auto',  
+                        marginRight: 'auto'
+                    }} 
+                    />
+                    <div style={{
+                        position: 'absolute',
+                        top: '50%', // 컨테이너의 중간 위치
+                        left: '50%', // 컨테이너의 중간 위치
+                        transform: 'translate(-50%, -50%)', // 중앙 정렬
+                        width: '100%', // 텍스트 너비를 컨테이너 너비와 맞춤
+                        textAlign: 'center',
+                    }}>
+                    <p style={{
+                        fontFamily: 'KCCMurukmuruk',
+                        fontSize: '31px',
+                        whiteSpace: 'pre-wrap',
+                        lineHeight: '1.7',
+                        color: 'black', // 텍스트 색상은 이미지에 따라 조정
+                    }}>
+                        {addSpacesEveryNineCharacters(fetchedString)}
+                    </p>
+                    </div>
                 </div>
             )}
+
             <div style={{...buttonWrapperStyle, display: 'flex', justifyContent: 'center', gap: '20px'}}>
                 <div style = {{ textAlign : 'center '}}>
                     <img 
