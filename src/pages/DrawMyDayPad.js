@@ -43,37 +43,41 @@ const DrawMyDayPad = () => {
   };
 
   const saveAndSendCanvas = () => {
-    invertColors(); 
+    invertColors();
 
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.toBlob(blob => {
         const reader = new FileReader();
-        reader.onloadend = () => { 
+        reader.onloadend = () => {
           const base64data = reader.result;
           localStorage.setItem('savedImage', base64data);
         };
         reader.readAsDataURL(blob);
 
-        const userInfoFormData = new FormData(); 
         const userInfo = localStorage.getItem('userInfo');
-        if (userInfo) {
-          userInfoFormData.append('userInfo', userInfo);
-          axios.post('http://3.17.80.177/userinfo', userInfoFormData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          })
-          .then(response => {
-            console.log('사용자 정보가 성공적으로 전송되었습니다.', response.data);
-          })
-          .catch((error) => {
-            console.error('사용자 정보 전송 오류:', error);
-          });
+        if (!userInfo) {
+          window.alert("아이쿠, 여기에 내 정보가 하나도 없네!\n함께 내 이야기를 채워볼까?");
+          window.location.href = '/';
+          return; 
         }
 
-        const formData = new FormData(); 
-        formData.append('file', blob, 'paper.png'); 
+        const userInfoFormData = new FormData();
+        userInfoFormData.append('userInfo', userInfo);
+        axios.post('http://3.17.80.177/userinfo', userInfoFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(response => {
+          console.log('사용자 정보가 성공적으로 전송되었습니다.', response.data);
+        })
+        .catch((error) => {
+          console.error('사용자 정보 전송 오류:', error);
+        });
+
+        const formData = new FormData();
+        formData.append('file', blob, 'paper.png');
 
         axios.post('http://3.17.80.177/upload', formData, {
           headers: {
@@ -91,7 +95,6 @@ const DrawMyDayPad = () => {
       }, 'image/png');
     }
   };
-
 
   useEffect(() => {
     const canvas = canvasRef.current;
