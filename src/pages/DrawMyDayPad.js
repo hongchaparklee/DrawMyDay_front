@@ -24,6 +24,18 @@ const DrawMyDayPad = () => {
   const goToColoringPad = (base64Image) => {
     navigate('/coloring', { state: { image: base64Image } });
   }
+
+  const navigateToMainPage = () => navigate('/');
+
+  const mainPageButtonStyle = {
+    cursor: 'pointer',
+    position: 'absolute',
+    width : '42px',
+    height : '42px',
+    top: '0',
+    right: '80px',
+    margin: '10px',
+};
  
   const invertColors = () => {
     const canvas = canvasRef.current;
@@ -235,6 +247,12 @@ const DrawMyDayPad = () => {
       <div style={{ width: '420px', display: 'flex', justifyContent: 'space-between', marginBottom: '20px', padding: '10px', backgroundColor: 'white', borderRadius: '10px', border: '1px solid #ccc' }}>
         {/* 첫 번째 버튼 그룹 */}
         <div style={{ display: 'flex', flexDirection: 'row', gap: '30px', marginLeft: '50px' }}>
+        <img 
+                src={`${process.env.PUBLIC_URL}/assets/home.png`} 
+                alt="메인 페이지로" 
+                style={mainPageButtonStyle} 
+                onClick={navigateToMainPage} 
+            />
           <button
             className={`btn ${!isEraserMode ? 'btn-selected' : ''}`}
             style={{

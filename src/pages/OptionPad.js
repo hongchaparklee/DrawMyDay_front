@@ -10,6 +10,18 @@ const UserInfoForm = () => {
     glasses: false,
   });
 
+  const navigateToMainPage = () => navigate('/');
+
+    const mainPageButtonStyle = {
+        cursor: 'pointer',
+        position: 'absolute',
+        width : '45px',
+        height : '45px',
+        top: '170px',
+        right: '400px',
+        margin: '10px',
+    };
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -61,6 +73,12 @@ const UserInfoForm = () => {
 
   return (
     <form onSubmit={handleSubmit} style={formStyle}>
+      <img 
+                src={`${process.env.PUBLIC_URL}/assets/home.png`} 
+                alt="메인 페이지로" 
+                style={mainPageButtonStyle} 
+                onClick={navigateToMainPage} 
+            />
       <div>
         <label>이름 : </label>
         <input
